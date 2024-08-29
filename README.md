@@ -61,11 +61,11 @@ Our project is divided into six main phases:
 5. Testing and Optimization
 6. Documentation and Handover
 
-For detailed information about each phase, including objectives, tasks, and deliverables, please refer to our [Project Wiki](#).
+For detailed information about each phase, including objectives, tasks, and deliverables, please refer to our [Project Wiki](https://github.com/PunGrumpy/kubernetes-automated-load-balancer/wiki).
 
 ## 📚 Documentation
 
-Comprehensive documentation for this project, including architectural details, configuration guides, and troubleshooting tips, can be found in our [Project Wiki](#).
+Comprehensive documentation for this project, including architectural details, configuration guides, and troubleshooting tips, can be found in our [Project Wiki](https://github.com/PunGrumpy/kubernetes-automated-load-balancer/wiki).
 
 ## 📄 License
 
