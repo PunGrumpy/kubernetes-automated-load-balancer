@@ -26,29 +26,7 @@ A project focused on designing and implementing automated load balancing within 
 
 ## 🏗️ Architecture
 
-```mermaid
-graph TD
-    A[☸️ Kubernetes Cluster]
-    C[📁 Git Repository] --> D[🛠️ Kustomize]
-    D --> E[🚀 ArgoCD]
-    E --> A
-    F[⚓ Helm] --> A
-    A --> G[🔍 Prometheus]
-    A --> M[📚 Loki]
-    G --> H[📊 Grafana]
-    M --> H
-    I[🚦 Traefik] --> A
-
-    F -->|📦 Package Management| A
-    I -->|🔐 Ingress & SSL/TLS| A
-
-    J[👩‍💻 Developer] -->|🔄 Push changes| C
-    K[🌐 External Traffic] --> I
-    I -->|⚖️ Load Balance| A
-    I -->|🔒 Let's Encrypt| L[🛡️ SSL/TLS Certificates]
-
-    H -->|📉 Visualize| N[🖥️ Grafana Dashboard]
-```
+![Architecture](public/architecture.png)
 
 ## 🎯 Project Phases
 
