@@ -9,6 +9,7 @@ A project focused on designing and implementing automated load balancing within 
 - ☸️ [Kubernetes](https://kubernetes.io/) - Container Orchestration
 - 📦 [Helm](https://helm.sh/) - Package Manager for Kubernetes
 - 🚀 [GitHub Actions](https://github.com/actions) - Continuous Integration and Delivery Pipelines
+- 🔐 [Vault](https://www.vaultproject.io/) - Secrets Management
 - 🐙 [ArgoCD](https://argoproj.github.io/argo-cd/) - GitOps Continuous Delivery
 - 🚦 [Traefik](https://traefik.io/) - Ingress Controller for Kubernetes
 - 📊 [Prometheus](https://prometheus.io/) - Monitoring and Alerting Toolkit
