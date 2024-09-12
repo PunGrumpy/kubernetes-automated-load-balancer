@@ -1,0 +1,64 @@
+replicaCount: 2
+
+image:
+  repository: nginx
+  tag: stable
+  pullPolicy: IfNotPresent
+
+nameOverride: ''
+fullnameOverride: ''
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ''
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+configMap:
+  data: {}
+
+ingressRoute:
+  enabled: true
+  name: k8s-auto-loadbalancer
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - match: Host(`pungrumpy.xyz`)
+      kind: Rule
+      priority: 10
+      services:
+        - name: k8s-auto-loadbalancer
+          port: 80
+  tls:
+    certResolver: cloudflare

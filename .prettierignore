@@ -1,1 +1,1 @@
-helm-testapp/templates/*.yaml
+helm/templates/*.yaml
