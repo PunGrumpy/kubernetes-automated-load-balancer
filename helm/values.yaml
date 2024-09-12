@@ -51,7 +51,6 @@ ingressRoute:
   enabled: true
   name: k8s-auto-loadbalancer
   entryPoints:
-    - web
     - websecure
   routes:
     - match: Host(`pungrumpy.xyz`)
