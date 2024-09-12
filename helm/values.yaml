@@ -53,7 +53,7 @@ ingressRoute:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`pungrumpy.xyz`)
+    - match: Host(`k8s.pungrumpy.xyz`)
       kind: Rule
       priority: 10
       services:
