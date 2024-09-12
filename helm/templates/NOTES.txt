@@ -1,24 +1,46 @@
-1. Get the application URL by running these commands:
+NOTES:
+Thank you for installing {{ .Chart.Name }}.
+
+Your release is named {{ .Release.Name }}.
+
+To learn more about the release, try:
+
+  $ helm status {{ .Release.Name }}
+  $ helm get all {{ .Release.Name }}
+
 {{- if .Values.ingressRoute.enabled }}
-{{- range .Values.ingressRoute.routes }}
-  {{- $match := .match }}
-  {{- if contains "Host(" $match }}
-    {{- $host := regexFind "Host\\(`([^`]+)`\\)" $match | regexReplaceAll "Host\\(`(.+)`\\)" "${1}" }}
-  http{{ if $.Values.ingressRoute.tls }}s{{ end }}://{{ $host }}
-  {{- end }}
+1. Access your application:
+   Your application should be available at:
+   {{- range .Values.ingressRoute.routes }}
+   {{- $match := .match }}
+   {{- if contains "Host(`" $match }}
+   {{- $host := regexReplaceAll "Host\\(`(.+)`\\).*" $match "${1}" }}
+   https://{{ $host }}
+   {{- end }}
+   {{- end }}
+   
+   Note: It may take a few minutes for the DNS and TLS certificate to be fully propagated.
+
+2. IngressRoute details:
+   Name: {{ .Values.ingressRoute.name }}
+   Entry Points: {{ join ", " .Values.ingressRoute.entryPoints }}
+   TLS: Enabled (Cert Resolver: {{ .Values.ingressRoute.tls.certResolver }})
+{{- else }}
+1. Access your application:
+   Your IngressRoute is not enabled. To access your application, you may need to expose it manually or enable the IngressRoute in your values.yaml file.
 {{- end }}
-{{- else if contains "NodePort" .Values.service.type }}
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "k8s-auto-loadbalancer.fullname" . }})
-  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo http://$NODE_IP:$NODE_PORT
-{{- else if contains "LoadBalancer" .Values.service.type }}
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch its status by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "k8s-auto-loadbalancer.fullname" . }}'
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "k8s-auto-loadbalancer.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-  echo http://$SERVICE_IP:{{ .Values.service.port }}
-{{- else if contains "ClusterIP" .Values.service.type }}
-  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "k8s-auto-loadbalancer.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-  export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
-  echo "Visit http://127.0.0.1:8080 to use your application"
-  kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
-{{- end }}
+
+3. Service details:
+   Type: {{ .Values.service.type }}
+   Port: {{ .Values.service.port }}
+
+4. Autoscaling:
+   Enabled: {{ .Values.autoscaling.enabled }}
+   {{- if .Values.autoscaling.enabled }}
+   Min Replicas: {{ .Values.autoscaling.minReplicas }}
+   Max Replicas: {{ .Values.autoscaling.maxReplicas }}
+   Target CPU Utilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}%
+   Target Memory Utilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}%
+   {{- end }}
+
+5. For more information and troubleshooting, please check the documentation or contact support.
