@@ -46,18 +46,17 @@ affinity: {}
 
 configMap:
   data: {}
-
-ingressRoute:
-  enabled: true
-  name: k8s-auto-loadbalancer
-  entryPoints:
-    - websecure
-  routes:
-    - match: Host(`k8s.pungrumpy.xyz`)
-      kind: Rule
-      priority: 10
-      services:
-        - name: k8s-auto-loadbalancer
-          port: 80
-  tls:
-    certResolver: cloudflare
+# ingressRoute:
+#   enabled: true
+#   name: k8s-auto-loadbalancer
+#   entryPoints:
+#     - websecure
+#   routes:
+#     - match: Host(`pungrumpy.xyz`)
+#       kind: Rule
+#       priority: 10
+#       services:
+#         - name: k8s-auto-loadbalancer
+#           port: 80
+#   tls:
+#     certResolver: cloudflare
