@@ -44,9 +44,6 @@ tolerations: []
 
 affinity: {}
 
-configMap:
-  data: {}
-
 ingressRoute:
   enabled: true
   name: k8s-auto-loadbalancer
