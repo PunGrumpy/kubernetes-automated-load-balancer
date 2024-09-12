@@ -46,6 +46,7 @@ affinity: {}
 
 configMap:
   data: {}
+
 # ingressRoute:
 #   enabled: true
 #   name: k8s-auto-loadbalancer
@@ -60,3 +61,5 @@ configMap:
 #           port: 80
 #   tls:
 #     certResolver: cloudflare
+
+ingressRoute: {}
