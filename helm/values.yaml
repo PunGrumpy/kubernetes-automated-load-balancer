@@ -5,8 +5,8 @@ image:
   tag: stable
   pullPolicy: IfNotPresent
 
-nameOverride: ''
-fullnameOverride: ''
+nameOverride: 'k8s-auto-loadbalancer'
+fullnameOverride: 'k8s-auto-loadbalancer'
 
 serviceAccount:
   create: true
@@ -47,19 +47,17 @@ affinity: {}
 configMap:
   data: {}
 
-# ingressRoute:
-#   enabled: true
-#   name: k8s-auto-loadbalancer
-#   entryPoints:
-#     - websecure
-#   routes:
-#     - match: Host(`pungrumpy.xyz`)
-#       kind: Rule
-#       priority: 10
-#       services:
-#         - name: k8s-auto-loadbalancer
-#           port: 80
-#   tls:
-#     certResolver: cloudflare
-
-ingressRoute: {}
+ingressRoute:
+  enabled: true
+  name: k8s-auto-loadbalancer
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`pungrumpy.xyz`)
+      kind: Rule
+      priority: 10
+      services:
+        - name: k8s-auto-loadbalancer
+          port: 80
+  tls:
+    certResolver: cloudflare
