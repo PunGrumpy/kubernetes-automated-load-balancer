@@ -17,3 +17,9 @@ output "traefik_release_name" {
   description = "Release name of Traefik"
   value       = helm_release.traefik.name
 }
+
+output "argocd_admin_password" {
+  description = "ArgoCD admin password"
+  value       = nonsensitive(data.kubernetes_secret.argocd_admin_password.data["password"])
+  sensitive   = true
+}
