@@ -1,5 +1,5 @@
 resource "kubectl_manifest" "argocd_ingress_route" {
-  yaml_body = templatefile("${path.module}/templates/ingress-route.yaml", {
+  yaml_body = templatefile("${path.module}/templates/ingress-route.yml", {
     name          = "argocd-server"
     namespace     = "argocd"
     domain        = var.argocd_domain
@@ -10,7 +10,7 @@ resource "kubectl_manifest" "argocd_ingress_route" {
 }
 
 resource "kubectl_manifest" "grafana_ingress_route" {
-  yaml_body = templatefile("${path.module}/templates/ingress-route.yaml", {
+  yaml_body = templatefile("${path.module}/templates/ingress-route.yml", {
     name          = "grafana"
     namespace     = "monitoring"
     domain        = var.grafana_domain
