@@ -11,6 +11,6 @@ resource "null_resource" "get_kubeconfig" {
   depends_on = [null_resource.install_k3s]
 
   provisioner "local-exec" {
-    command = "scp -i ${var.ssh_private_key} ${var.ssh_user}@${var.server_ip}:/home/${var.ssh_user}/.kube/config ${path.module}/../../kubeconfig"
+    command = "scp -i ${var.ssh_private_key} ${var.ssh_user}@${var.server_ip}:/home/${var.ssh_user}/.kube/config ~/.kube/config"
   }
 }
