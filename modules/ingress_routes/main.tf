@@ -7,8 +7,6 @@ resource "kubectl_manifest" "argocd_ingress_route" {
     service_port  = 80
     cert_resolver = "cloudflare"
   })
-
-  depends_on = [module.helm_releases]
 }
 
 resource "kubectl_manifest" "grafana_ingress_route" {
@@ -20,6 +18,4 @@ resource "kubectl_manifest" "grafana_ingress_route" {
     service_port  = 80
     cert_resolver = "cloudflare"
   })
-
-  depends_on = [module.helm_releases]
 }

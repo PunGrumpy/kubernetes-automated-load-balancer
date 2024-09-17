@@ -11,3 +11,10 @@ module "helm_releases" {
   cloudflare_email   = var.cloudflare_email
   cloudflare_api_key = var.cloudflare_api_key
 }
+
+module "ingress_routes" {
+  source         = "./modules/ingress_routes"
+  depends_on     = [module.helm_releases]
+  argocd_domain  = var.argocd_domain
+  grafana_domain = var.grafana_domain
+}
