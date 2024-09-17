@@ -21,7 +21,7 @@ resource "helm_release" "argocd" {
   create_namespace = true
 
   values = [
-    file("${path.module}/../../values/argocd.yml")
+    file("${path.module}/values/argocd.yml")
   ]
 }
 
@@ -52,7 +52,7 @@ resource "helm_release" "traefik" {
   create_namespace = true
 
   values = [
-    file("${path.module}/../../values/traefik.yml")
+    file("${path.module}/values/traefik.yml")
   ]
 
   depends_on = [kubernetes_secret.cloudflare_secret]
