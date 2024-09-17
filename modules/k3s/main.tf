@@ -5,10 +5,6 @@ resource "null_resource" "install_k3s" {
     private_key = file(var.ssh_private_key)
     host        = var.server_ip
   }
-
-  provisioner "remote-exec" {
-    script = "${path.module}/../../scripts/install_k3s.sh"
-  }
 }
 
 resource "null_resource" "get_kubeconfig" {
