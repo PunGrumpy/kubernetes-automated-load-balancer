@@ -1,0 +1,9 @@
+server_ip       = "your server ip"
+ssh_user        = "your ssh user"
+ssh_private_key = "your ssh private key path"
+
+cloudflare_email   = "your cloudflare email"
+cloudflare_api_key = "your cloudflare token"
+
+argocd_domain  = "argocd.yourdomain.com"
+grafana_domain = "grafana.yourdomain.com"
