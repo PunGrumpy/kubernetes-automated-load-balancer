@@ -47,6 +47,17 @@ affinity: {}
 configMap:
   data: {}
 
+rollingUpdate:
+  maxSurge: 25%
+  maxUnavailable: 25%
+
+readinessProbe:
+  initialDelaySeconds: 10
+  periodSeconds: 5
+  successThreshold: 1
+  failureThreshold: 3
+
+# Ingress routing with Traefik
 ingressRoute:
   enabled: true
   name: k8s-auto-loadbalancer

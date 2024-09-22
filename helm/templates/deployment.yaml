@@ -11,6 +11,11 @@ spec:
   selector:
     matchLabels:
       {{- include "k8s-auto-loadbalancer.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: {{ .Values.rollingUpdate.maxSurge | default "25%" }}
+      maxUnavailable: {{ .Values.rollingUpdate.maxUnavailable | default "25%" }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -43,8 +48,12 @@ spec:
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /healthz
               port: http
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds | default 10 }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds | default 5 }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold | default 1 }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold | default 3 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           envFrom:
