@@ -55,18 +55,10 @@ rollingUpdate:
   maxUnavailable: 25%
 
 readinessProbe:
-  httpGet:
-    path: /
-    port: 80
   initialDelaySeconds: 10
   periodSeconds: 5
-  successThreshold: 1
-  failureThreshold: 3
 
 livenessProbe:
-  httpGet:
-    path: /
-    port: 80
   initialDelaySeconds: 15
   periodSeconds: 10
 

@@ -11,11 +11,6 @@ spec:
   selector:
     matchLabels:
       {{- include "k8s-auto-loadbalancer.selectorLabels" . | nindent 6 }}
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: {{ .Values.rollingUpdate.maxSurge | default "25%" }}
-      maxUnavailable: {{ .Values.rollingUpdate.maxUnavailable | default "25%" }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -40,22 +35,16 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: 80
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: {{ .Values.livenessProbe.httpGet.path | default "/" }}
-              port: {{ .Values.livenessProbe.httpGet.port | default .Values.service.port }}
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds | default 15 }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds | default 10 }}
+              path: /
+              port: http
           readinessProbe:
             httpGet:
-              path: {{ .Values.readinessProbe.httpGet.path | default "/" }}
-              port: {{ .Values.readinessProbe.httpGet.port | default .Values.service.port }}
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds | default 10 }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds | default 5 }}
-            successThreshold: {{ .Values.readinessProbe.successThreshold | default 1 }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold | default 3 }}
+              path: /
+              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           envFrom:
