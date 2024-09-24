@@ -29,4 +29,27 @@ spec:
           type: Utilization
           averageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
     {{- end }}
+    {{- if .Values.autoscaling.behavior }}
+    behavior:
+      {{- if .Values.autoscaling.behavior.scaleDown }}
+      scaleDown:
+        stabilizationWindowSeconds: {{ .Values.autoscaling.behavior.scaleDown.stabilizationWindowSeconds }}
+        policies:
+          {{- range .Values.autoscaling.behavior.scaleDown.policies }}
+          - type: {{ .type }}
+            value: {{ .value }}
+            periodSeconds: {{ .periodSeconds }}
+          {{- end }}
+      {{- end }}
+      {{- if .Values.autoscaling.behavior.scaleUp }}
+      scaleUp:
+        stabilizationWindowSeconds: {{ .Values.autoscaling.behavior.scaleUp.stabilizationWindowSeconds }}
+        policies:
+          {{- range .Values.autoscaling.behavior.scaleUp.policies }}
+          - type: {{ .type }}
+            value: {{ .value }}
+            periodSeconds: {{ .periodSeconds }}
+          {{- end }}
+      {{- end }}
+    {{- end }}
 {{- end }}
