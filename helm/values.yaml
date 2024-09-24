@@ -5,8 +5,8 @@ image:
   tag: stable
   pullPolicy: IfNotPresent
 
-nameOverride: 'k8s-auto-loadbalancer'
-fullnameOverride: 'k8s-auto-loadbalancer'
+nameOverride: ''
+fullnameOverride: ''
 
 serviceAccount:
   create: true
@@ -50,18 +50,6 @@ affinity: {}
 configMap:
   data: {}
 
-rollingUpdate:
-  maxSurge: 25%
-  maxUnavailable: 25%
-
-readinessProbe:
-  initialDelaySeconds: 10
-  periodSeconds: 5
-
-livenessProbe:
-  initialDelaySeconds: 15
-  periodSeconds: 10
-
 # Ingress routing with Traefik
 ingressRoute:
   enabled: true
@@ -69,11 +57,11 @@ ingressRoute:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`pungrumpy.xyz`)
+    - match: Host(`example.com`)
       kind: Rule
       priority: 10
       services:
         - name: k8s-auto-loadbalancer
           port: 80
   tls:
-    certResolver: cloudflare
+    certResolver: default
