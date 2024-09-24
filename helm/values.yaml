@@ -15,12 +15,9 @@ serviceAccount:
 
 podAnnotations: {}
 
-podSecurityContext:
-  runAsNonRoot: true
-  runAsUser: 1000
+podSecurityContext: {}
 
-securityContext:
-  allowPrivilegeEscalation: false
+securityContext: {}
 
 service:
   type: ClusterIP
