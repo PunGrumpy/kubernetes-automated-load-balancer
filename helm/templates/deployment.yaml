@@ -11,6 +11,10 @@ spec:
   selector:
     matchLabels:
       {{- include "k8s-auto-loadbalancer.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      {{- toYaml .Values.rollingUpdate | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}

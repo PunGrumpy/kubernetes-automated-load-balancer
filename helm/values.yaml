@@ -60,6 +60,10 @@ affinity: {}
 configMap:
   data: {}
 
+rollingUpdate:
+  maxSurge: 25%
+  maxUnavailable: 25%
+
 livenessProbe:
   httpGet:
     path: /
