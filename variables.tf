@@ -14,6 +14,11 @@ variable "ssh_private_key" {
   sensitive   = true
 }
 
+variable "kube_config_context" {
+  description = "Kubeconfig context"
+  type        = string
+}
+
 variable "cloudflare_email" {
   description = "Cloudflare account email"
   type        = string
