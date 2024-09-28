@@ -1,0 +1,17 @@
+---
+alertmanager:
+  enabled: true
+
+server:
+  global:
+    scrape_interval: 15s
+  retention: 15d
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 512Mi
+      cpu: 200m
+  nodeSelector:
+    kubernetes.io/os: linux
