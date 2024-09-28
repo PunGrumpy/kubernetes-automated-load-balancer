@@ -14,3 +14,13 @@ configs:
     # -- Run server without TLS
     ## NOTE: This value should be set when you generate params by other means as it changes ports used by ingress template.
     server.insecure: true
+
+## Application controller
+controller:
+  ## Application controller metrics configuration
+  metrics:
+    # -- Deploy metrics service
+    enabled: true
+    applicationLabels:
+      # -- Enables additional labels in argocd_app_labels metric
+      enabled: true
