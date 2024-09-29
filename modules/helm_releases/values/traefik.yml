@@ -68,7 +68,6 @@ ingressClass:
 # Metrics
 metrics:
   prometheus:
-    entryPoint: metrics
     addRoutersLabels: true
     addEntryPointsLabels: true
     addServicesLabels: true
