@@ -15,6 +15,7 @@ spec:
     type: RollingUpdate
     rollingUpdate:
       {{- toYaml .Values.rollingUpdate | nindent 6 }}
+  progressDeadlineSeconds: {{ .Values.progressDeadlineSeconds }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
