@@ -93,5 +93,7 @@ ingressRoute:
       services:
         - name: k8s-auto-loadbalancer
           port: 80
+      middlwares:
+        - name: ratelimits-kalb
   tls:
     certResolver: cloudflare
