@@ -94,7 +94,7 @@ ingressRoute:
         - name: k8s-auto-loadbalancer
           port: 80
       middlewares:
-        - name: limits-kalb
-          namespace: kalb
+        - name: ratelimits
+          namespace: traefik
   tls:
     certResolver: cloudflare
