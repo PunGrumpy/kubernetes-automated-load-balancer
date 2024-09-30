@@ -95,6 +95,6 @@ ingressRoute:
           port: 80
       middlewares:
         - name: ratelimits
-          namespace: traefik
+          namespace: kalb
   tls:
     certResolver: cloudflare
