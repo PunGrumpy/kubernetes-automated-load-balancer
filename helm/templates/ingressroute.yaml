@@ -27,6 +27,7 @@ spec:
       middlewares:
         {{- range . }}
         - name: {{ .name }}
+          namespace: {{ .namespace }}
         {{- end }}
       {{- end }}
     {{- end }}

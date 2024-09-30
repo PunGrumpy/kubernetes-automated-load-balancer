@@ -95,5 +95,6 @@ ingressRoute:
           port: 80
       middlwares:
         - name: ratelimits-kalb
+          namespace: kalb
   tls:
     certResolver: cloudflare
