@@ -12,9 +12,6 @@ spec:
       services:
         - name: ${service_name}
           port: ${service_port}
-      middlewares:
-        - name: ratelimits
-          namespace: traefik
     %{ if service_name == "argocd-server" }
     - match: Host(`${domain}`) && HeadersRegexp(`Content-Type`, `application/grpc`)
       kind: Rule
@@ -22,9 +19,6 @@ spec:
         - name: ${service_name}
           port: ${service_port}
           scheme: h2c
-      middlewares:
-        - name: ratelimits
-          namespace: traefik
     %{ endif }
   tls:
     certResolver: ${cert_resolver}
