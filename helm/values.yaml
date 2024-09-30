@@ -93,7 +93,7 @@ ingressRoute:
       services:
         - name: k8s-auto-loadbalancer
           port: 80
-      middlwares:
+      middlewares:
         - name: ratelimits-kalb
           namespace: kalb
   tls:
