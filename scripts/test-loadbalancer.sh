@@ -49,8 +49,9 @@ check_deployment
 
 # Test 3: Load balancing
 log "Test 3: Testing load balancing..."
+kubectl delete pod load-generator -n ${NAMESPACE} --ignore-not-found || log "WARNING: Failed to delete existing load-generator pod"
 kube_command run -i --rm --restart=Never load-generator --image=busybox -- /bin/sh -c \
-  "for i in {1..100}; do wget -qO- http://${SERVICE_NAME} >/dev/null && echo 'Request $i: Success' || echo 'Request $i: Failed'; done"
+  "i=1; while [ \$i -le 100 ]; do wget -qO- http://${SERVICE_NAME} >/dev/null && echo 'Request \$i: Success' || echo 'Request \$i: Failed'; i=\$((i+1)); done"
 log "Analyzing load balancing results..."
 kube_command logs deployment/${DEPLOYMENT_NAME} --tail=100 | grep "GET /" | awk '{print $1}' | sort | uniq -c
 
