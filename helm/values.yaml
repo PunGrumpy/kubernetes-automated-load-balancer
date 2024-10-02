@@ -5,13 +5,13 @@ image:
   tag: stable
   pullPolicy: IfNotPresent
 
-nameOverride: 'k8s-auto-loadbalancer'
-fullnameOverride: 'k8s-auto-loadbalancer'
+nameOverride: "k8s-auto-loadbalancer"
+fullnameOverride: "k8s-auto-loadbalancer"
 
 serviceAccount:
   create: true
   annotations: {}
-  name: ''
+  name: ""
 
 podAnnotations: {}
 
@@ -93,8 +93,5 @@ ingressRoute:
       services:
         - name: k8s-auto-loadbalancer
           port: 80
-      middlewares:
-        - name: ratelimits
-          namespace: kalb
   tls:
     certResolver: cloudflare
