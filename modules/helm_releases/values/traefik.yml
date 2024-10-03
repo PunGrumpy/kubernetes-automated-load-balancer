@@ -71,10 +71,3 @@ metrics:
     addRoutersLabels: true
     addEntryPointsLabels: true
     addServicesLabels: true
-
-# Plugin
-experimental:
-  plugins:
-    bouncer:
-      moduleName: github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin
-      version: v1.3.4-beta1
