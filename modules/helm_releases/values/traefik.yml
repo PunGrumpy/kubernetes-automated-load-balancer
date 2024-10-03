@@ -71,3 +71,10 @@ metrics:
     addRoutersLabels: true
     addEntryPointsLabels: true
     addServicesLabels: true
+
+# Plugins
+experimental:
+  plugins:
+    coraza:
+      moduleName: github.com/jcchavezs/coraza-http-wasm-traefik
+      version: v0.2.2
