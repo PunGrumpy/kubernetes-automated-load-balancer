@@ -30,9 +30,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ./app/Dockerfile.www
-          build-args: |
-            PROJECT=www
+          file: ./app/Dockerfile.dev
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
