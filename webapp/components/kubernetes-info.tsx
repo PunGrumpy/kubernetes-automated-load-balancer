@@ -22,26 +22,12 @@ export function KubernetesInfo({ data, loading }: KubernetesInfoProps) {
         icon={Server}
         label="Pod Name"
         value={data?.podName}
-        subValue={data?.podIp}
         loading={loading}
       />
       <InfoItem
         icon={Cpu}
-        label="Node Name"
-        value={data?.nodeName}
-        subValue={data?.nodeIp}
-        loading={loading}
-      />
-      <InfoItem
-        icon={Box}
-        label="Namespace"
-        value={data?.namespace}
-        loading={loading}
-      />
-      <InfoItem
-        icon={Network}
-        label="Kubernetes Version"
-        value={data?.kubernetesVersion}
+        label="CPU Usage"
+        value={data?.cpuUsage}
         loading={loading}
       />
       <InfoItem
