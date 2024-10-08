@@ -1,16 +1,21 @@
-'use client'
-
 import { motion } from 'framer-motion'
 import { LucideIcon } from 'lucide-react'
 
 interface InfoItemProps {
   icon: LucideIcon
   label: string
-  value: string | number | null
+  value: string | number | null | undefined
   loading: boolean
+  subValue?: string | null | undefined
 }
 
-export function InfoItem({ icon: Icon, label, value, loading }: InfoItemProps) {
+export function InfoItem({
+  icon: Icon,
+  label,
+  value,
+  loading,
+  subValue
+}: InfoItemProps) {
   return (
     <motion.div
       className="flex items-center justify-between space-x-4 rounded-lg bg-card p-4 shadow-md transition-shadow hover:shadow-lg"
@@ -22,22 +27,22 @@ export function InfoItem({ icon: Icon, label, value, loading }: InfoItemProps) {
         <div className="rounded-full bg-primary/10 p-2">
           <Icon className="size-5 text-primary" aria-hidden="true" />
         </div>
-        <span className="font-medium text-foreground">{label}</span>
+        <div>
+          <span className="font-medium text-foreground">{label}</span>
+          {subValue && (
+            <p className="text-sm text-muted-foreground">{subValue}</p>
+          )}
+        </div>
       </div>
       {loading ? (
         <motion.div
           className="h-6 w-24 rounded bg-primary/20"
           animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{
-            repeat: Infinity,
-            duration: 1.5,
-            ease: 'easeInOut',
-            delay: 0.5
-          }}
+          transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
         />
       ) : (
         <motion.span
-          className="font-bold text-primary"
+          className="text-lg font-bold text-primary"
           key={value}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
