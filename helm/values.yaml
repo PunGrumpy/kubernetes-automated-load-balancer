@@ -1,17 +1,17 @@
 replicaCount: 2
 
 image:
-  repository: nginx
+  repository: pungrumpy/kalb
   tag: e1a18f1fcc582474b5dd3ca0757f3b037caf695a
   pullPolicy: IfNotPresent
 
-nameOverride: "k8s-auto-loadbalancer"
-fullnameOverride: "k8s-auto-loadbalancer"
+nameOverride: 'k8s-auto-loadbalancer'
+fullnameOverride: 'k8s-auto-loadbalancer'
 
 serviceAccount:
   create: true
   annotations: {}
-  name: ""
+  name: ''
 
 podAnnotations: {}
 
@@ -22,6 +22,7 @@ securityContext: {}
 service:
   type: ClusterIP
   port: 80
+  targetPort: 3000
 
 resources:
   limits:
