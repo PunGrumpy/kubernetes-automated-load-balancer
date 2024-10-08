@@ -15,7 +15,7 @@ import { fetchWrapper } from '@/utils/fetch-wrapper'
 export default function Page() {
   const [isRefreshing, setIsRefreshing] = useState(false)
   const { data, error, isLoading, mutate } = useSWR<KubernetesData>(
-    process.env.NEXT_PUBLIC_API_URL,
+    'api/info',
     fetchWrapper
   )
 
