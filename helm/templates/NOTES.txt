@@ -42,4 +42,10 @@ To learn more about the release, try:
    Target Memory Utilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}%
    {{- end }}
 
-5. For more information and troubleshooting, please check the documentation or contact support.
+5. Secrets:
+   This deployment uses an existing Secret: {{ .Values.secrets.webappSecretName }}
+   Note: This Secret is managed by Vault and updated every 30 minutes.
+
+-------------------------------------------------------------------------------
+
+For more information and troubleshooting, please check the documentation or contact support.
