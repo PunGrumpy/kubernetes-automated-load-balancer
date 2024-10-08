@@ -3,6 +3,8 @@ name: 🚀 Continuous Deployment
 on:
   push:
     branches: [main]
+    paths:
+      - 'webapp/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
