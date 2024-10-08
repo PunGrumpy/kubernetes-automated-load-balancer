@@ -15,7 +15,7 @@ import { fetchWrapper } from '@/utils/fetch-wrapper'
 export default function Page() {
   const [isRefreshing, setIsRefreshing] = useState(false)
   const { data, error, isLoading, mutate } = useSWR<KubernetesData>(
-    'api/info',
+    '/api/info',
     fetchWrapper
   )
 
