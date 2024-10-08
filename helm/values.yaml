@@ -24,9 +24,6 @@ service:
   port: 80
   targetPort: 3000
 
-secrets:
-  secretName: webapp-secret
-
 resources:
   limits:
     cpu: 100m
