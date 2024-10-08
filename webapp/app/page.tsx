@@ -14,7 +14,7 @@ interface Data {
   serverTime: string
 }
 
-export default function Home() {
+export default function Page() {
   const [data, setData] = useState<Data | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -42,29 +42,31 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-4 text-foreground">
+    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-4">
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
+        className="w-full max-w-lg"
       >
-        <Card className="border-border shadow-lg">
-          <CardHeader className="space-y-1 text-center">
-            <CardTitle className="text-3xl font-bold">
+        <Card className="overflow-hidden border-none shadow-xl">
+          <CardHeader className="bg-primary text-primary-foreground">
+            <CardTitle className="text-center text-3xl font-bold">
               Kubernetes Load Balanced App
             </CardTitle>
           </CardHeader>
-          <CardContent className="grid gap-6">
+          <CardContent className="space-y-6 p-6">
             <AnimatePresence mode="wait">
               {error ? (
                 <motion.div
-                  className="rounded-lg bg-destructive/10 p-3 text-center text-sm text-destructive"
+                  className="rounded-lg bg-destructive/10 p-4 text-center text-sm text-destructive"
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
+                  role="alert"
                 >
-                  {error}
+                  <p className="font-semibold">Error</p>
+                  <p>{error}</p>
                 </motion.div>
               ) : (
                 <motion.div
@@ -76,13 +78,13 @@ export default function Home() {
                   <InfoItem
                     icon={Server}
                     label="Pod Name"
-                    value={data?.podName ?? null}
+                    value={data?.podName ?? 'N/A'}
                     loading={loading}
                   />
                   <InfoItem
                     icon={Users}
                     label="Total Visitors"
-                    value={data?.visitorCount ?? null}
+                    value={data?.visitorCount ?? 'N/A'}
                     loading={loading}
                   />
                   <InfoItem
@@ -98,17 +100,20 @@ export default function Home() {
                 </motion.div>
               )}
             </AnimatePresence>
-            <Button
-              onClick={fetchData}
-              className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
-              disabled={loading}
-            >
-              <RefreshCw className="mr-2 size-4" />
-              {loading ? 'Refreshing...' : 'Refresh'}
-            </Button>
+            <div className="flex justify-center">
+              <Button
+                onClick={fetchData}
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
+                disabled={loading}
+                size="lg"
+              >
+                <RefreshCw className="mr-2 size-5" aria-hidden="true" />
+                <span>{loading ? 'Refreshing...' : 'Refresh Data'}</span>
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </motion.div>
-    </div>
+    </main>
   )
 }
