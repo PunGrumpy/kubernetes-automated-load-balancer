@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { LucideIcon } from 'lucide-react'
 
 import { Card, CardContent } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import {
   Tooltip,
   TooltipContent,
@@ -43,15 +44,7 @@ export function InfoItem({
                   <p className="text-sm font-medium text-foreground">{label}</p>
                 </div>
                 {loading ? (
-                  <motion.div
-                    className="mt-1 h-6 w-full rounded bg-primary/20"
-                    animate={{ opacity: [0.5, 1, 0.5] }}
-                    transition={{
-                      repeat: Infinity,
-                      duration: 1.5,
-                      ease: 'easeInOut'
-                    }}
-                  />
+                  <Skeleton className="mt-1 h-8 w-3/4" />
                 ) : (
                   <motion.div
                     className="flex grow items-center"
