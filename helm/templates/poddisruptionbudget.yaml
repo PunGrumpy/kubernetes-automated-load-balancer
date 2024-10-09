@@ -1,0 +1,13 @@
+{{- if .Values.podDisruptionBudget.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "k8s-auto-loadbalancer.fullname" . }}
+  labels:
+    {{- include "k8s-auto-loadbalancer.labels" . | nindent 4 }}
+spec:
+  minAvailable: {{ .Values.podDisruptionBudget.minAvailable }}
+  selector:
+    matchLabels:
+      {{- include "k8s-auto-loadbalancer.selectorLabels" . | nindent 6 }}
+{{- end }}

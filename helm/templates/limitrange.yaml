@@ -1,0 +1,17 @@
+{{- if .Values.limitRange.enabled -}}
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: {{ include "k8s-auto-loadbalancer.fullname" . }}-limit-range
+  labels:
+    {{- include "k8s-auto-loadbalancer.labels" . | nindent 4 }}
+spec:
+  limits:
+  - default:
+      cpu: {{ .Values.limitRange.defaultLimit.cpu }}
+      memory: {{ .Values.limitRange.defaultLimit.memory }}
+    defaultRequest:
+      cpu: {{ .Values.limitRange.defaultRequest.cpu }}
+      memory: {{ .Values.limitRange.defaultRequest.memory }}
+    type: Container
+{{- end }}

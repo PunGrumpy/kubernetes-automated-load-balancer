@@ -1,47 +1,33 @@
-Thank you for installing {{ .Chart.Name }}.
+Thank you for installing {{ .Chart.Name }}. Your release is named {{ .Release.Name }}.
 
-Your release is named {{ .Release.Name }}.
-
-To learn more about the release, try:
-
-  $ helm status {{ .Release.Name }}
-  $ helm get all {{ .Release.Name }}
-
+1. Application Access:
 {{- if .Values.ingressRoute.enabled }}
-1. Access your application:
-   Your application should be available at:
+   {{- $host := "" }}
    {{- range .Values.ingressRoute.routes }}
-   {{- $match := .match }}
-   {{- if contains "Host(`" $match }}
-   {{- $host := regexReplaceAll "Host\\(`(.+)`\\).*" $match "${1}" }}
-   https://{{ $host }}
+     {{- $match := .match }}
+     {{- if contains "Host(`" $match }}
+       {{- $host = regexReplaceAll "Host\\(`(.+?)`\\).*" $match "${1}" }}
+     {{- end }}
    {{- end }}
-   {{- end }}
-   
-   Note: It may take a few minutes for the DNS and TLS certificate to be fully propagated.
-
-2. IngressRoute details:
-   Name: {{ .Values.ingressRoute.name }}
-   Entry Points: {{ join ", " .Values.ingressRoute.entryPoints }}
+   URL: https://{{ $host }}
    TLS: Enabled (Cert Resolver: {{ .Values.ingressRoute.tls.certResolver }})
 {{- else }}
-1. Access your application:
-   Your IngressRoute is not enabled. To access your application, you may need to expose it manually or enable the IngressRoute in your values.yaml file.
+   IngressRoute is not enabled. You may need to expose your application manually.
 {{- end }}
 
-3. Service details:
-   Type: {{ .Values.service.type }}
-   Port: {{ .Values.service.port }}
+2. Service: {{ .Values.service.type }} (Port: {{ .Values.service.port }})
 
-4. Autoscaling:
-   Enabled: {{ .Values.autoscaling.enabled }}
-   {{- if .Values.autoscaling.enabled }}
-   Min Replicas: {{ .Values.autoscaling.minReplicas }}
-   Max Replicas: {{ .Values.autoscaling.maxReplicas }}
-   Target CPU Utilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}%
-   Target Memory Utilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}%
-   {{- end }}
+3. Autoscaling: {{ if .Values.autoscaling.enabled }}Enabled ({{ .Values.autoscaling.minReplicas }}-{{ .Values.autoscaling.maxReplicas }} replicas){{ else }}Disabled{{ end }}
 
--------------------------------------------------------------------------------
+4. Resource Management:
+   PodDisruptionBudget: {{ if .Values.podDisruptionBudget.enabled }}Enabled (Min Available: {{ .Values.podDisruptionBudget.minAvailable }}){{ else }}Disabled{{ end }}
+   ResourceQuota: {{ if .Values.resourceQuota.enabled }}Enabled{{ else }}Disabled{{ end }}
+   LimitRange: {{ if .Values.limitRange.enabled }}Enabled{{ else }}Disabled{{ end }}
 
-For more information and troubleshooting, please check the documentation or contact support.
+5. Resource Limits (per pod):
+   CPU: {{ .Values.resources.requests.cpu }} - {{ .Values.resources.limits.cpu }}
+   Memory: {{ .Values.resources.requests.memory }} - {{ .Values.resources.limits.memory }}
+
+For more details:
+  $ helm status {{ .Release.Name }}
+  $ helm get all {{ .Release.Name }}

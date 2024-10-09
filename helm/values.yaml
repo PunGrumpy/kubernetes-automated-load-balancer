@@ -29,8 +29,8 @@ secrets:
 
 resources:
   limits:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 400m
+    memory: 512Mi
   requests:
     cpu: 100m
     memory: 128Mi
@@ -38,7 +38,7 @@ resources:
 autoscaling:
   enabled: true
   minReplicas: 2
-  maxReplicas: 10
+  maxReplicas: 4
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
   behavior:
@@ -46,14 +46,17 @@ autoscaling:
       stabilizationWindowSeconds: 300
       policies:
         - type: Percent
-          value: 50
-          periodSeconds: 300
+          value: 100
+          periodSeconds: 15
     scaleUp:
-      stabilizationWindowSeconds: 300
+      stabilizationWindowSeconds: 0
       policies:
         - type: Percent
-          value: 50
-          periodSeconds: 300
+          value: 100
+          periodSeconds: 15
+        - type: Pods
+          value: 1
+          periodSeconds: 15
 
 nodeSelector: {}
 
@@ -76,6 +79,7 @@ readinessProbe:
     port: http
   initialDelaySeconds: 10
   periodSeconds: 5
+  failureThreshold: 3
 
 livenessProbe:
   httpGet:
@@ -83,8 +87,8 @@ livenessProbe:
     port: http
   initialDelaySeconds: 15
   periodSeconds: 10
+  failureThreshold: 3
 
-# Ingress routing with Traefik
 ingressRoute:
   enabled: true
   name: k8s-auto-loadbalancer
@@ -99,3 +103,24 @@ ingressRoute:
           port: 80
   tls:
     certResolver: cloudflare
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+resourceQuota:
+  enabled: true
+  hard:
+    requests.cpu: '1'
+    limits.cpu: '2'
+    requests.memory: 2Gi
+    limits.memory: 4Gi
+
+limitRange:
+  enabled: true
+  defaultLimit:
+    cpu: 500m
+    memory: 512Mi
+  defaultRequest:
+    cpu: 100m
+    memory: 256Mi
