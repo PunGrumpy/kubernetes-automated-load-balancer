@@ -9,13 +9,13 @@ import { ErrorDisplay } from '@/components/error-display'
 import { KubernetesInfo } from '@/components/kubernetes-info'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { fetchWrapper } from '@/lib/fetch-wrapper'
 import { KubernetesData } from '@/types'
-import { fetchWrapper } from '@/utils/fetch-wrapper'
 
 export default function Page() {
   const [isRefreshing, setIsRefreshing] = useState(false)
   const { data, error, isLoading, mutate } = useSWR<KubernetesData>(
-    '/api/info',
+    process.env.NEXT_PUBLIC_API_URL,
     fetchWrapper
   )
 
@@ -31,7 +31,7 @@ export default function Page() {
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-2xl"
+        className="w-full max-w-5xl"
       >
         <Card className="overflow-hidden border-none shadow-xl">
           <CardHeader className="bg-primary text-primary-foreground">
@@ -54,7 +54,10 @@ export default function Page() {
                 disabled={isLoading || isRefreshing}
                 size="lg"
               >
-                <RefreshCw className="mr-2 size-5" aria-hidden="true" />
+                <RefreshCw
+                  className={`mr-2 size-5 ${isRefreshing ? 'animate-spin' : ''}`}
+                  aria-hidden="true"
+                />
                 <span>
                   {isLoading || isRefreshing ? 'Refreshing...' : 'Refresh Data'}
                 </span>
