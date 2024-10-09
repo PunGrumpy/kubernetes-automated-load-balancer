@@ -33,6 +33,9 @@ jobs:
         with:
           context: webapp
           file: webapp/Dockerfile
+          secrets: |
+            UPSTASH_REDIS_REST_URL=${{ secrets.UPSTASH_REDIS_REST_URL }}
+            UPSTASH_REDIS_REST_TOKEN=${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
           push: true
           tags: |
             pungrumpy/kalb:${{ github.sha }}
