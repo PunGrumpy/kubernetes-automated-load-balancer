@@ -16,7 +16,12 @@ export default function Page() {
   const [isRefreshing, setIsRefreshing] = useState(false)
   const { data, error, isLoading, mutate } = useSWR<KubernetesData>(
     '/api/info',
-    fetchWrapper
+    fetchWrapper,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0
+    }
   )
 
   const handleRefresh = async () => {
