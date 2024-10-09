@@ -1,0 +1,51 @@
+name: ☸️ Helm CD
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'helm/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'helm/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: 🧹 Lint Helm Chart
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+      - name: 🚀 Setup Helm
+        uses: azure/setup-helm@v4
+      - name: 🧹 Lint
+        run: helm lint helm
+
+  validate:
+    name: ✅ Validate Helm Chart
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+      - name: 🚀 Setup Helm
+        uses: azure/setup-helm@v4
+      - name: ✅ Validate
+        run: |
+          helm template helm | kubectl apply --dry-run=client -f -
+
+  dry-run:
+    name: 🏃‍♂️ Dry Run Helm Chart
+    needs: [lint, validate]
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+      - name: 🚀 Setup Helm
+        uses: azure/setup-helm@v4
+      - name: 🏃‍♂️ Dry Run
+        run: helm install --dry-run --debug kalb helm
