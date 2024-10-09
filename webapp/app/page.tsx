@@ -13,6 +13,8 @@ import { fetchWrapper } from '@/lib/fetch-wrapper'
 import { KubernetesData } from '@/types'
 
 export default function Page() {
+  console.log(`[DEBUG] API Path: ${process.env.NEXT_PUBLIC_API_URL}`)
+
   const [isRefreshing, setIsRefreshing] = useState(false)
   const { data, error, isLoading, mutate } = useSWR<KubernetesData>(
     process.env.NEXT_PUBLIC_API_URL,
