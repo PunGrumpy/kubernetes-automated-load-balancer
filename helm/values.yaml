@@ -29,17 +29,17 @@ secrets:
 
 resources:
   limits:
-    cpu: 400m
+    cpu: 500m
     memory: 512Mi
   requests:
     cpu: 100m
-    memory: 128Mi
+    memory: 256Mi
 
 autoscaling:
   enabled: true
   minReplicas: 2
   maxReplicas: 4
-  targetCPUUtilizationPercentage: 80
+  targetCPUUtilizationPercentage: 50
   targetMemoryUtilizationPercentage: 80
   behavior:
     scaleDown:
