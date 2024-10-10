@@ -30,16 +30,16 @@ secrets:
 resources:
   limits:
     cpu: 400m
-    memory: 512Mi
+    memory: 768Mi
   requests:
-    cpu: 100m
+    cpu: 200m
     memory: 256Mi
 
 autoscaling:
   enabled: true
   minReplicas: 2
   maxReplicas: 4
-  targetCPUUtilizationPercentage: 50
+  targetCPUUtilizationPercentage: 70
   targetMemoryUtilizationPercentage: 80
   behavior:
     scaleDown:
@@ -77,16 +77,16 @@ readinessProbe:
   httpGet:
     path: /
     port: http
-  initialDelaySeconds: 10
-  periodSeconds: 5
+  initialDelaySeconds: 5
+  periodSeconds: 3
   failureThreshold: 3
 
 livenessProbe:
   httpGet:
     path: /
     port: http
-  initialDelaySeconds: 15
-  periodSeconds: 10
+  initialDelaySeconds: 10
+  periodSeconds: 5
   failureThreshold: 3
 
 ingressRoute:
