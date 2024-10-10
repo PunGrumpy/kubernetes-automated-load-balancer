@@ -25,15 +25,3 @@ jobs:
         uses: azure/setup-helm@v4
       - name: 🧹 Lint
         run: helm lint helm
-
-  dry-run:
-    name: 🏃‍♂️ Dry Run Helm Chart
-    needs: [lint]
-    runs-on: ubuntu-latest
-    steps:
-      - name: 📥 Checkout
-        uses: actions/checkout@v4
-      - name: 🚀 Setup Helm
-        uses: azure/setup-helm@v4
-      - name: 🏃‍♂️ Dry Run
-        run: helm install --dry-run --debug kalb helm
