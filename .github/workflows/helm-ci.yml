@@ -1,4 +1,4 @@
-name: ☸️ Helm CD
+name: ☸️ Helm CI
 
 on:
   push:
