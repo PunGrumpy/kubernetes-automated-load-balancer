@@ -1,0 +1,55 @@
+name: 🔍 Trivy Nightly Docker Image Scan
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'webapp/**'
+      - '.github/workflows/trivy-docker.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'webapp/**'
+      - '.github/workflows/trivy-docker.yml'
+  schedule:
+    # Run at 12:00 AM UTC (5:00 PM PST) every day
+    - cron: '0 17 * * *'
+  workflow_dispatch:
+
+permissions:
+  actions: none
+  checks: none
+  contents: read
+  deployments: none
+  issues: none
+  packages: none
+  pull-requests: none
+  repository-projects: none
+  security-events: write
+  statuses: none
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  scan:
+    name: 🕵️ Scan Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+      - name: 🐳 Trivy Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'pungrumpy/kalb:lastest'
+          format: 'sarif'
+          exit-code: 1
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+      - name: 📤 Upload SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
