@@ -26,6 +26,18 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
+# Update and upgrade packages to fix vulnerabilities
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends \
+    e2fsprogs \
+    libcom-err2 \
+    libext2fs2 \
+    libss2 \
+    logsave && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Don't run as root
 RUN addgroup --system --gid 1001 bunjs
 RUN adduser --system --uid 1001 nextjs
