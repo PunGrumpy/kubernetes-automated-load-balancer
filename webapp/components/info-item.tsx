@@ -38,10 +38,13 @@ export function InfoItem({
                 transition={{ duration: 0.5 }}
               >
                 <div className="mb-2 flex items-center">
-                  <div className="mr-2 rounded-full bg-gray-100 p-2">
-                    <Icon className="size-5 text-gray-600" aria-hidden="true" />
+                  <div className="mr-2 rounded-full bg-muted p-2">
+                    <Icon
+                      className="size-5 text-secondary-foreground"
+                      aria-hidden="true"
+                    />
                   </div>
-                  <p className="text-sm font-medium text-gray-700">{label}</p>
+                  <p className="text-sm font-medium">{label}</p>
                 </div>
                 {loading ? (
                   <Skeleton className="mt-1 h-8 w-3/4" />
@@ -53,13 +56,15 @@ export function InfoItem({
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <p className="break-words text-2xl font-bold text-gray-900">
+                    <p className="break-words text-2xl font-bold">
                       {value ?? 'N/A'}
                     </p>
                   </motion.div>
                 )}
                 {subValue && (
-                  <p className="mt-1 text-sm text-gray-500">{subValue}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {subValue}
+                  </p>
                 )}
               </motion.div>
             </CardContent>

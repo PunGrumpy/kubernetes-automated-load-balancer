@@ -13,6 +13,7 @@ import {
 import { useState } from 'react'
 import useSWR from 'swr'
 
+import { ErrorDisplay } from '@/components/error-display'
 import { InfoItem } from '@/components/info-item'
 import { Button } from '@/components/ui/button'
 import { fetchWrapper } from '@/lib/fetch-wrapper'
@@ -40,10 +41,8 @@ export default function Page() {
     <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-background to-secondary/20 p-4">
       <div className="mx-auto max-w-7xl">
         <header className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900">
-            Kubernetes Dashboard
-          </h1>
-          <p className="mt-2 text-lg text-gray-600">
+          <h1 className="text-4xl font-bold">Kubernetes Dashboard</h1>
+          <p className="mt-2 text-lg text-muted-foreground">
             Monitor your cluster&apos;s performance and stats
           </p>
         </header>
@@ -101,7 +100,6 @@ export default function Page() {
           <div className="mt-8 flex justify-center">
             <Button
               onClick={handleRefresh}
-              className="bg-black text-white hover:bg-gray-800"
               disabled={isLoading || isRefreshing}
               size="lg"
             >
