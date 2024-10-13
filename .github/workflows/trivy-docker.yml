@@ -43,7 +43,7 @@ jobs:
       - name: 🐳 Trivy Scan
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'pungrumpy/kalb:lastest'
+          image-ref: 'pungrumpy/kalb:latest'
           format: 'sarif'
           exit-code: 1
           ignore-unfixed: true
