@@ -15,8 +15,16 @@ const geistMono = localFont({
 })
 
 export const metadata: Metadata = {
+  metadataBase: process.env.NEXT_PUBLIC_METADATA_BASE
+    ? new URL(`${process.env.NEXT_PUBLIC_METADATA_BASE}`)
+    : new URL('https://pungrumpy.xyz'),
   title: 'Kubernetes Load Balanced App',
-  description: '🦦 A Next.js app running on Kubernetes with a load balancer'
+  description: '🦦 A Next.js app running on Kubernetes with a load balancer',
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/apple-touch-icon.png'
+  }
 }
 
 interface RootLayoutProps {
