@@ -114,15 +114,7 @@ export default function Page() {
           </div>
 
           {error && (
-            <motion.div
-              className="mt-6 rounded-lg bg-red-50 p-4 text-center text-sm text-red-800"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              role="alert"
-            >
-              <p className="font-semibold">Error: {error.message}</p>
-            </motion.div>
+            <ErrorDisplay message={error?.message ?? 'An error occurred'} />
           )}
         </main>
       </div>

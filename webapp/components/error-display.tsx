@@ -8,7 +8,7 @@ interface ErrorDisplayProps {
 export function ErrorDisplay({ message }: ErrorDisplayProps) {
   return (
     <motion.div
-      className="rounded-lg bg-destructive/10 p-4 text-center text-sm text-destructive"
+      className="mt-6 rounded-lg bg-destructive/10 p-4 text-center text-sm text-destructive"
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 10 }}
