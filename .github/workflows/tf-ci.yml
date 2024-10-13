@@ -2,9 +2,11 @@ name: 🌌 Terraform CI
 
 on:
   push:
-    branches: [setup/server]
+    branches:
+      - setup/server
   pull_request:
-    branches: [setup/server]
+    branches:
+      - setup/server
 
 permissions:
   pull-requests: write
