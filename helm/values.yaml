@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: pungrumpy/kalb
-  tag: c1866529082a354628a843dea535272488c86237
+  tag: 24efbc097219862e5fd55a8983d54c1a3dddef86
   pullPolicy: IfNotPresent
 
 nameOverride: 'k8s-auto-loadbalancer'
