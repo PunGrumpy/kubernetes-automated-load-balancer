@@ -30,11 +30,11 @@ ENV NODE_ENV=production
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-    e2fsprogs \
-    libcom-err2 \
-    libext2fs2 \
-    libss2 \
-    logsave && \
+    e2fsprogs=1.46.2-2+deb11u1 \
+    libcom-err2=1.46.2-2+deb11u1 \
+    libext2fs2=1.46.2-2+deb11u1 \
+    libss2=1.46.2-2+deb11u1 \
+    logsave=1.46.2-2+deb11u1 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
