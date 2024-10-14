@@ -23,7 +23,7 @@ spec:
           scheme: {{ .scheme }}
           {{- end }}
         {{- end }}
-      {{- with .middlewares }}
+      {{- if .middlewares }}
       middlewares:
         {{- range .middlewares }}
         - name: {{ . }}
