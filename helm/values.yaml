@@ -105,7 +105,6 @@ ingressRoute:
         - health-check
         - rate-limit
         - retry
-        - circuit-breaker
   tls:
     certResolver: cloudflare
 
