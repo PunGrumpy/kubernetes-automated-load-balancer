@@ -29,8 +29,8 @@ secrets:
 
 resources:
   limits:
-    cpu: 750m
-    memory: 640Mi
+    cpu: 500m
+    memory: 768Mi
   requests:
     cpu: 200m
     memory: 512Mi
@@ -38,9 +38,9 @@ resources:
 autoscaling:
   enabled: true
   minReplicas: 2
-  maxReplicas: 6
-  targetCPUUtilizationPercentage: 65
-  targetMemoryUtilizationPercentage: 75
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
   behavior:
     scaleDown:
       stabilizationWindowSeconds: 300
@@ -103,8 +103,9 @@ ingressRoute:
           port: 80
       middlewares:
         - health-check
-        - strip-prefix
         - rate-limit
+        - retry
+        - circuit-breaker
   tls:
     certResolver: cloudflare
 
@@ -114,16 +115,20 @@ middlewares:
       headers:
         customRequestHeaders:
           X-Forwarded-Proto: https
-  - name: strip-prefix
-    spec:
-      stripPrefix:
-        prefixes:
-          - /api
   - name: rate-limit
     spec:
       rateLimit:
         average: 100
         burst: 50
+  - name: retry
+    spec:
+      retry:
+        attempts: 3
+        initialInterval: 100ms
+  - name: circuit-breaker
+    spec:
+      circuitBreaker:
+        expression: 'NetworkErrorRatio() > 0.20 || LatencyAtQuantileMS(50.0) > 250'
 
 podDisruptionBudget:
   enabled: true
