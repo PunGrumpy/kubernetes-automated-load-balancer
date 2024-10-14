@@ -101,8 +101,29 @@ ingressRoute:
       services:
         - name: k8s-auto-loadbalancer
           port: 80
+      middlewares:
+        - health-check
+        - strip-prefix
+        - rate-limit
   tls:
     certResolver: cloudflare
+
+middlewares:
+  - name: health-check
+    spec:
+      headers:
+        customRequestHeaders:
+          X-Forwarded-Proto: https
+  - name: strip-prefix
+    spec:
+      stripPrefix:
+        prefixes:
+          - /api
+  - name: rate-limit
+    spec:
+      rateLimit:
+        average: 100
+        burst: 50
 
 podDisruptionBudget:
   enabled: true

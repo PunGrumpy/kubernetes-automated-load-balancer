@@ -23,9 +23,15 @@ spec:
           scheme: {{ .scheme }}
           {{- end }}
         {{- end }}
+      {{- if .middlewares }}
+      middlewares:
+        {{- range .middlewares }}
+        - name: {{ . }}
+        {{- end }}
+      {{- end }}
     {{- end }}
   {{- with .Values.ingressRoute.tls }}
   tls:
-    certResolver: {{ .certResolver }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
 {{- end }}
