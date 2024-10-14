@@ -5,13 +5,13 @@ image:
   tag: fcad5848755319ecba16e41dc3b6dd984dea6ebe
   pullPolicy: IfNotPresent
 
-nameOverride: "k8s-auto-loadbalancer"
-fullnameOverride: "k8s-auto-loadbalancer"
+nameOverride: 'k8s-auto-loadbalancer'
+fullnameOverride: 'k8s-auto-loadbalancer'
 
 serviceAccount:
   create: true
   annotations: {}
-  name: ""
+  name: ''
 
 podAnnotations: {}
 
@@ -36,7 +36,7 @@ resources:
     memory: 512Mi
 
 autoscaling:
-  enabled: true
+  enabled: false
   minReplicas: 2
   maxReplicas: 4
   targetCPUUtilizationPercentage: 70
@@ -111,8 +111,8 @@ podDisruptionBudget:
 resourceQuota:
   enabled: true
   hard:
-    requests.cpu: "1"
-    limits.cpu: "2"
+    requests.cpu: '1'
+    limits.cpu: '2'
     requests.memory: 2Gi
     limits.memory: 4Gi
 
