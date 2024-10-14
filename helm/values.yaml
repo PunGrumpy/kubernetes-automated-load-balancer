@@ -125,10 +125,6 @@ middlewares:
       retry:
         attempts: 3
         initialInterval: 100ms
-  - name: circuit-breaker
-    spec:
-      circuitBreaker:
-        expression: 'NetworkErrorRatio() > 0.20 || LatencyAtQuantileMS(50.0) > 250'
 
 podDisruptionBudget:
   enabled: true
