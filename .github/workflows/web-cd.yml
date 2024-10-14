@@ -53,13 +53,19 @@ jobs:
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v4
+      - name: 👷‍♂️ Setting git config
+        run: |
+          git config --local user.name 'GitHub Actions'
+          git config --local user.email 'actions@github.com'
+      - name: 📥 Fetch and Pull latest changes
+        run: |
+          git fetch origin main
+          git pull origin main
       - name: 🚀 Update Helm Chart
         run: |
           sed -i "s/^  tag: .*/  tag: ${{ github.sha }}/" helm/values.yaml
       - name: 📤 Commit and Push
         run: |
-          git config --local user.name 'GitHub Actions'
-          git config --local user.email 'actions@github.com'
           git add helm/values.yaml
           git commit -m "chore(helm): update image tag to ${{ github.sha }}"
           git push
