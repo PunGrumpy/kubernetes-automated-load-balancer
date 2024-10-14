@@ -48,6 +48,7 @@ jobs:
   update-helm:
     name: 🎩 Update Helm Chart
     needs: build-and-push
+    if: ${{ needs.build-and-push.result == 'success' && github.event_name == 'push' }}
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout
