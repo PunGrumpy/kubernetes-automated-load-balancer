@@ -104,6 +104,23 @@ ingressRoute:
   tls:
     certResolver: cloudflare
 
+middlewares:
+  - name: health-check
+    spec:
+      headers:
+        customRequestHeaders:
+          X-Forwarded-Proto: https
+  - name: strip-prefix
+    spec:
+      stripPrefix:
+        prefixes:
+          - /api
+  - name: rate-limit
+    spec:
+      rateLimit:
+        average: 100
+        burst: 50
+
 podDisruptionBudget:
   enabled: true
   minAvailable: 1

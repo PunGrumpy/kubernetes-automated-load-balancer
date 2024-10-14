@@ -23,6 +23,12 @@ spec:
           scheme: {{ .scheme }}
           {{- end }}
         {{- end }}
+      {{- with .middlewares }}
+      middlewares:
+        {{- range .middlewares }}
+        - name: {{ . }}
+        {{- end }}
+      {{- end }}
     {{- end }}
   {{- with .Values.ingressRoute.tls }}
   tls:
