@@ -32,6 +32,6 @@ spec:
     {{- end }}
   {{- with .Values.ingressRoute.tls }}
   tls:
-    certResolver: {{ .certResolver }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
 {{- end }}
