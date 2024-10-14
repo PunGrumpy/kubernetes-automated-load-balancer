@@ -31,6 +31,27 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: 🏷️ Get Meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: pungrumpy/kalb
+          labels: |
+            org.opencontainers.image.revision=${{ github.sha }}
+          tags: |
+            ${{ github.sha }}
+            latest
+      - name: 🪖 Docker Scout
+        id: docker-scout
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: docker/scout-action@v1
+        with:
+          command: compare
+          image: ${{ steps.meta.outputs.tags }}
+          to-env: production
+          ignore-unchanged: true
+          only-severities: critical,high
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: 🏗️ Build and Push
         uses: docker/build-push-action@v6
         with:
@@ -39,16 +60,19 @@ jobs:
           secrets: |
             UPSTASH_REDIS_REST_URL=${{ secrets.UPSTASH_REDIS_REST_URL }}
             UPSTASH_REDIS_REST_TOKEN=${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
-          push: ${{ github.event_name == 'push' }}
+          sbom: ${{ github.event_name != 'pull_request' }}
+          provenance: ${{ github.event_name != 'pull_request' }}
+          push: ${{ github.event_name != 'pull_request' }}
           load: ${{ github.event_name == 'pull_request' }}
-          tags: |
-            pungrumpy/kalb:${{ github.sha }}
-            pungrumpy/kalb:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   update-helm:
     name: 🎩 Update Helm Chart
     needs: build-and-push
-    if: ${{ needs.build-and-push.result == 'success' && github.event_name == 'push' }}
+    if: ${{ needs.build-and-push.result == 'success' && github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout
