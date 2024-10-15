@@ -13,10 +13,7 @@ serviceAccount:
   annotations: {}
   name: ''
 
-podAnnotations:
-  prometheus.io/scrape: 'true'
-  prometheus.io/port: '3000'
-  prometheus.io/path: '/api/metrics'
+podAnnotations: {}
 
 podSecurityContext: {}
 
@@ -105,7 +102,6 @@ ingressRoute:
         - name: k8s-auto-loadbalancer
           port: 80
       middlewares:
-        - prefix-strip
         - health-check
         - rate-limit
         - retry
@@ -113,11 +109,6 @@ ingressRoute:
     certResolver: cloudflare
 
 middlewares:
-  - name: prefix-strip
-    spec:
-      stripPrefix:
-        prefixes:
-          - /api/metrics
   - name: health-check
     spec:
       headers:
