@@ -5,13 +5,13 @@ image:
   tag: fcad5848755319ecba16e41dc3b6dd984dea6ebe
   pullPolicy: IfNotPresent
 
-nameOverride: 'k8s-auto-loadbalancer'
-fullnameOverride: 'k8s-auto-loadbalancer'
+nameOverride: "k8s-auto-loadbalancer"
+fullnameOverride: "k8s-auto-loadbalancer"
 
 serviceAccount:
   create: true
   annotations: {}
-  name: ''
+  name: ""
 
 podAnnotations: {}
 
@@ -102,6 +102,7 @@ ingressRoute:
         - name: k8s-auto-loadbalancer
           port: 80
       middlewares:
+        - prefix-strip
         - health-check
         - rate-limit
         - retry
@@ -109,6 +110,11 @@ ingressRoute:
     certResolver: cloudflare
 
 middlewares:
+  - name: prefix-strip
+    spec:
+      stripPrefix:
+        prefixes:
+          - /api/metrics
   - name: health-check
     spec:
       headers:
@@ -132,8 +138,8 @@ podDisruptionBudget:
 resourceQuota:
   enabled: true
   hard:
-    requests.cpu: '1'
-    limits.cpu: '2'
+    requests.cpu: "1"
+    limits.cpu: "2"
     requests.memory: 2Gi
     limits.memory: 4Gi
 
