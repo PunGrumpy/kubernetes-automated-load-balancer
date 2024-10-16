@@ -138,20 +138,23 @@ traefik:
     enabled: true
     configurations:
       - name: cors
-        headers:
-          accessControlAllowMethods:
-            - GET
-            - OPTIONS
-          accessControlMaxAge: 100
-          addVaryHeader: true
+        spec:
+          headers:
+            accessControlAllowMethods:
+              - GET
+              - OPTIONS
+            accessControlMaxAge: 100
+            addVaryHeader: true
       - name: ratelimit
-        rateLimit:
-          average: 100
-          burst: 50
+        spec:
+          rateLimit:
+            average: 100
+            burst: 50
       - name: retry
-        retry:
-          attempts: 3
-          initialInterval: '100ms'
+        spec:
+          retry:
+            attempts: 3
+            initialInterval: '100ms'
 
 # Pod Disruption Budget configuration
 podDisruptionBudget:
