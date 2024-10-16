@@ -23,7 +23,7 @@ spec:
       {{- if and $.Values.traefik.middlewares.enabled $.Values.traefik.middlewares.configurations }}
       middlewares:
         {{- range $.Values.traefik.middlewares.configurations }}
-        - name: {{ include "k8s-auto-loadbalancer.fullname" $ }}-{{ .name }}
+        - name: {{ .name }}
         {{- end }}
       {{- end }}
     {{- end }}

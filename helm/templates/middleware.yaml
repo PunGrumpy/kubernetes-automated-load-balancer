@@ -3,10 +3,10 @@
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
-  name: {{ include "k8s-auto-loadbalancer.fullname" $ }}-{{ .name }}
+  name: {{ .name }}
   labels:
     {{- include "k8s-auto-loadbalancer.labels" $ | nindent 4 }}
 spec:
-  {{- omit . "name" | toYaml | nindent 2 }}
+  {{- toYaml . | nindent 2 }}
 {{- end }}
 {{- end }}

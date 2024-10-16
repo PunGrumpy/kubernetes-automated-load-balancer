@@ -138,14 +138,12 @@ traefik:
     enabled: true
     configurations:
       - name: cors
-        cors:
-          accessControlAllowOrigin:
-            - 'https://pungrumpy.xyz'
+        headers:
           accessControlAllowMethods:
-            - 'GET'
-            - 'OPTIONS'
+            - GET
+            - OPTIONS
           accessControlAllowHeaders:
-            - 'Content-Type'
+            - Content-Type
           accessControlMaxAge: 100
           addVaryHeader: true
       - name: ratelimit
