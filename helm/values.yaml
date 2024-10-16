@@ -142,8 +142,6 @@ traefik:
           accessControlAllowMethods:
             - GET
             - OPTIONS
-          accessControlAllowHeaders:
-            - Content-Type
           accessControlMaxAge: 100
           addVaryHeader: true
       - name: ratelimit
