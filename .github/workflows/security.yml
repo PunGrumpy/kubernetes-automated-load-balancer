@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - setup/server
   pull_request:
     branches:
       - main
+      - setup/server
   schedule:
     # Run at 12:00 AM UTC (5:00 PM PST) every Monday
     - cron: '0 17 * * 1'
@@ -32,10 +34,28 @@ jobs:
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
       - name: 📤 Upload SARIF
-        if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'trivy-results.sarif'
+
+  tf-scan:
+    name: 🛡️ Terraform Security Scan
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+      - name: 💜 TFSec Scan
+        uses: aquasecurity/tfsec-sarif-action@v0.1.0
+        with:
+          sarif_file: 'tfsec-results.sarif'
+      - name: 📤 Upload SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'tfsec-results.sarif'
 
   codeql-analyze:
     name: 🔬 CodeQL Analysis
