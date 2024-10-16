@@ -137,14 +137,6 @@ traefik:
   middlewares:
     enabled: true
     configurations:
-      - name: cors
-        spec:
-          headers:
-            accessControlAllowMethods:
-              - GET
-              - OPTIONS
-            accessControlMaxAge: 100
-            addVaryHeader: true
       - name: ratelimit
         spec:
           rateLimit:
