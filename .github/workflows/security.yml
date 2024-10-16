@@ -6,9 +6,6 @@ on:
       - main
       - setup/server
   pull_request:
-    branches:
-      - main
-      - setup/server
   schedule:
     # Run at 12:00 AM UTC (5:00 PM PST) every Monday
     - cron: '0 17 * * 1'
@@ -24,6 +21,15 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  truffle-scan:
+    name: 🍄 TruffleHog Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+      - name: 🍄 TruffleHog Scan
+        uses: trufflesecurity/trufflehog@main
+
   trivy-scan-repo:
     name: 🔍 Trivy Repository Scan
     runs-on: ubuntu-latest
