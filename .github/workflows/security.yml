@@ -59,7 +59,9 @@ jobs:
 
   codeql-analyze:
     name: 🔬 CodeQL Analysis
-    needs: trivy-scan-repo
+    needs:
+      - trivy-scan-repo
+      - tf-scan
     runs-on: ubuntu-latest
     permissions:
       actions: read
