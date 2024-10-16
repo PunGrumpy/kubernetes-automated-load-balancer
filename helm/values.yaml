@@ -78,8 +78,8 @@ autoscaling:
             value: 1
             periodSeconds: 15
   vertical:
-    enabled: false
-    updateMode: 'Off'
+    enabled: true
+    updateMode: 'Auto'
     minAllowed:
       cpu: 100m
       memory: 256Mi
