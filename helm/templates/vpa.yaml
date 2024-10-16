@@ -1,4 +1,4 @@
-# Note: To use VerticalPodAutoscaler, you must first install the VPA components in your cluster.
+# NOTE: To use VerticalPodAutoscaler, you must first install the VPA components in your cluster.
 # For installation instructions, visit: https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#installation
 {{- if .Values.autoscaling.vertical.enabled }}
 apiVersion: autoscaling.k8s.io/v1
