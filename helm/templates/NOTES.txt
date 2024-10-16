@@ -19,7 +19,10 @@ Thank you for installing {{ .Chart.Name }}. Your release is named {{ .Release.Na
 
 3. Autoscaling:
    Horizontal: {{ if .Values.autoscaling.horizontal.enabled }}Enabled ({{ .Values.autoscaling.horizontal.minReplicas }}-{{ .Values.autoscaling.horizontal.maxReplicas }} replicas){{ else }}Disabled{{ end }}
-   Vertical: {{ if .Values.autoscaling.vertical.enabled }}Enabled{{ else }}Disabled{{ end }}
+   Vertical: {{ if .Values.autoscaling.vertical.enabled }}Enabled
+     Note: Make sure VPA is installed in your cluster. If not, follow the installation instructions at:
+     https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#installation
+   {{ else }}Disabled{{ end }}
 
 4. Resource Management:
    PodDisruptionBudget: {{ if .Values.podDisruptionBudget.enabled }}Enabled (Min Available: {{ .Values.podDisruptionBudget.minAvailable }}){{ else }}Disabled{{ end }}
