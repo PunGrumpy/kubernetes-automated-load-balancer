@@ -67,6 +67,7 @@ jobs:
   codeql-analyze:
     name: 🔬 CodeQL Analysis
     needs:
+      - truffle-scan
       - trivy-scan-repo
       - tf-scan
     runs-on: ubuntu-latest
