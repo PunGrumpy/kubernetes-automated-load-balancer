@@ -6,6 +6,12 @@ global:
 # Deployment configuration
 deployment:
   replicaCount: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  progressDeadlineSeconds: 600
   image:
     repository: pungrumpy/kalb
     tag: 17d528e480ad1c5f3720f5bc850a5a0c4d3d20fc
@@ -23,12 +29,6 @@ deployment:
   nodeSelector: {}
   tolerations: []
   affinity: {}
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
-  progressDeadlineSeconds: 600
 
 # Service configuration
 service:
