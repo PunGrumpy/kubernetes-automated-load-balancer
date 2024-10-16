@@ -1,33 +1,48 @@
 Thank you for installing {{ .Chart.Name }}. Your release is named {{ .Release.Name }}.
 
 1. Application Access:
-{{- if .Values.ingressRoute.enabled }}
+{{- if .Values.traefik.ingressRoute.enabled }}
    {{- $host := "" }}
-   {{- range .Values.ingressRoute.routes }}
+   {{- range .Values.traefik.ingressRoute.routes }}
      {{- $match := .match }}
      {{- if contains "Host(`" $match }}
        {{- $host = regexReplaceAll "Host\\(`(.+?)`\\).*" $match "${1}" }}
      {{- end }}
    {{- end }}
    URL: https://{{ $host }}
-   TLS: Enabled (Cert Resolver: {{ .Values.ingressRoute.tls.certResolver }})
+   TLS: Enabled (Cert Resolver: {{ .Values.traefik.ingressRoute.tls.certResolver }})
 {{- else }}
    IngressRoute is not enabled. You may need to expose your application manually.
 {{- end }}
 
 2. Service: {{ .Values.service.type }} (Port: {{ .Values.service.port }})
 
-3. Autoscaling: {{ if .Values.autoscaling.enabled }}Enabled ({{ .Values.autoscaling.minReplicas }}-{{ .Values.autoscaling.maxReplicas }} replicas){{ else }}Disabled{{ end }}
+3. Autoscaling:
+   Horizontal: {{ if .Values.autoscaling.horizontal.enabled }}Enabled ({{ .Values.autoscaling.horizontal.minReplicas }}-{{ .Values.autoscaling.horizontal.maxReplicas }} replicas){{ else }}Disabled{{ end }}
+   Vertical: {{ if .Values.autoscaling.vertical.enabled }}Enabled{{ else }}Disabled{{ end }}
 
 4. Resource Management:
    PodDisruptionBudget: {{ if .Values.podDisruptionBudget.enabled }}Enabled (Min Available: {{ .Values.podDisruptionBudget.minAvailable }}){{ else }}Disabled{{ end }}
-   ResourceQuota: {{ if .Values.resourceQuota.enabled }}Enabled{{ else }}Disabled{{ end }}
-   LimitRange: {{ if .Values.limitRange.enabled }}Enabled{{ else }}Disabled{{ end }}
+   ResourceQuota: {{ if .Values.resourceManagement.quota.enabled }}Enabled{{ else }}Disabled{{ end }}
+   LimitRange: {{ if .Values.resourceManagement.limitRange.enabled }}Enabled{{ else }}Disabled{{ end }}
 
 5. Resource Limits (per pod):
-   CPU: {{ .Values.resources.requests.cpu }} - {{ .Values.resources.limits.cpu }}
-   Memory: {{ .Values.resources.requests.memory }} - {{ .Values.resources.limits.memory }}
+   CPU: {{ .Values.deployment.resources.requests.cpu }} - {{ .Values.deployment.resources.limits.cpu }}
+   Memory: {{ .Values.deployment.resources.requests.memory }} - {{ .Values.deployment.resources.limits.memory }}
 
-For more details:
+6. Middlewares:
+{{- if and .Values.traefik.middlewares.enabled .Values.traefik.middlewares.configurations }}
+   Enabled middlewares:
+   {{- range .Values.traefik.middlewares.configurations }}
+   - {{ .name }}
+   {{- end }}
+{{- else }}
+   No middlewares enabled.
+{{- end }}
+
+For more details about your release, try:
   $ helm status {{ .Release.Name }}
   $ helm get all {{ .Release.Name }}
+
+To delete this release:
+  $ helm delete {{ .Release.Name }}

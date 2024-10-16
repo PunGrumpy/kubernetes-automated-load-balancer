@@ -1,13 +1,12 @@
-{{- if .Values.middlewares }}
-{{- range .Values.middlewares }}
----
+{{- if and .Values.traefik.middlewares.enabled .Values.traefik.middlewares.configurations }}
+{{- range .Values.traefik.middlewares.configurations }}
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
-  name: {{ .name }}
+  name: {{ include "k8s-auto-loadbalancer.fullname" $ }}-{{ .name }}
   labels:
     {{- include "k8s-auto-loadbalancer.labels" $ | nindent 4 }}
 spec:
-  {{- toYaml .spec | nindent 2 }}
+  {{- omit . "name" | toYaml | nindent 2 }}
 {{- end }}
 {{- end }}

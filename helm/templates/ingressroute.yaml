@@ -1,17 +1,17 @@
-{{- if .Values.ingressRoute.enabled -}}
+{{- if .Values.traefik.ingressRoute.enabled -}}
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ .Values.ingressRoute.name }}
+  name: {{ include "k8s-auto-loadbalancer.fullname" . }}
   labels:
     {{- include "k8s-auto-loadbalancer.labels" . | nindent 4 }}
 spec:
   entryPoints:
-    {{- range .Values.ingressRoute.entryPoints }}
+    {{- range .Values.traefik.ingressRoute.entryPoints }}
     - {{ . }}
     {{- end }}
   routes:
-    {{- range .Values.ingressRoute.routes }}
+    {{- range .Values.traefik.ingressRoute.routes }}
     - match: {{ .match }}
       kind: {{ .kind }}
       priority: {{ .priority }}
@@ -19,18 +19,15 @@ spec:
         {{- range .services }}
         - name: {{ .name }}
           port: {{ .port }}
-          {{- if .scheme }}
-          scheme: {{ .scheme }}
-          {{- end }}
         {{- end }}
-      {{- if .middlewares }}
+      {{- if and $.Values.traefik.middlewares.enabled $.Values.traefik.middlewares.configurations }}
       middlewares:
-        {{- range .middlewares }}
-        - name: {{ . }}
+        {{- range $.Values.traefik.middlewares.configurations }}
+        - name: {{ include "k8s-auto-loadbalancer.fullname" $ }}-{{ .name }}
         {{- end }}
       {{- end }}
     {{- end }}
-  {{- with .Values.ingressRoute.tls }}
+  {{- with .Values.traefik.ingressRoute.tls }}
   tls:
     {{- toYaml . | nindent 4 }}
   {{- end }}

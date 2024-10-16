@@ -1,17 +1,15 @@
-{{- if .Values.limitRange.enabled -}}
+{{- if .Values.resourceManagement.limitRange.enabled }}
 apiVersion: v1
 kind: LimitRange
 metadata:
-  name: {{ include "k8s-auto-loadbalancer.fullname" . }}-limit-range
+  name: {{ include "k8s-auto-loadbalancer.fullname" . }}
   labels:
     {{- include "k8s-auto-loadbalancer.labels" . | nindent 4 }}
 spec:
   limits:
   - default:
-      cpu: {{ .Values.limitRange.defaultLimit.cpu }}
-      memory: {{ .Values.limitRange.defaultLimit.memory }}
+      {{- toYaml .Values.resourceManagement.limitRange.defaultLimit | nindent 6 }}
     defaultRequest:
-      cpu: {{ .Values.limitRange.defaultRequest.cpu }}
-      memory: {{ .Values.limitRange.defaultRequest.memory }}
+      {{- toYaml .Values.resourceManagement.limitRange.defaultRequest | nindent 6 }}
     type: Container
 {{- end }}

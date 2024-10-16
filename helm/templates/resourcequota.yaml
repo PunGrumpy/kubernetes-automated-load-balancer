@@ -1,11 +1,11 @@
-{{- if .Values.resourceQuota.enabled }}
+{{- if .Values.resourceManagement.quota.enabled }}
 apiVersion: v1
 kind: ResourceQuota
 metadata:
-  name: {{ include "k8s-auto-loadbalancer.fullname" . }}-quota
+  name: {{ include "k8s-auto-loadbalancer.fullname" . }}
   labels:
     {{- include "k8s-auto-loadbalancer.labels" . | nindent 4 }}
 spec:
   hard:
-    {{- toYaml .Values.resourceQuota.hard | nindent 4 }}
+    {{- toYaml .Values.resourceManagement.quota.hard | nindent 4 }}
 {{- end }}

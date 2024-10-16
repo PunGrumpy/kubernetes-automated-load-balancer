@@ -1,0 +1,23 @@
+{{- if .Values.autoscaling.vertical.enabled }}
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ include "k8s-auto-loadbalancer.fullname" . }}
+  labels:
+    {{- include "k8s-auto-loadbalancer.labels" . | nindent 4 }}
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: {{ include "k8s-auto-loadbalancer.fullname" . }}
+  updatePolicy:
+    updateMode: {{ .Values.autoscaling.vertical.updateMode }}
+  resourcePolicy:
+    containerPolicies:
+      - containerName: '*'
+        minAllowed:
+          {{- toYaml .Values.autoscaling.vertical.minAllowed | nindent 10 }}
+        maxAllowed:
+          {{- toYaml .Values.autoscaling.vertical.maxAllowed | nindent 10 }}
+        controlledResources: ["cpu", "memory"]
+{{- end }}
