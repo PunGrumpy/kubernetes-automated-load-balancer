@@ -30,6 +30,23 @@ deployment:
   tolerations: []
   affinity: {}
 
+# Probes configuration
+probes:
+  readiness:
+    httpGet:
+      path: /
+      port: http
+    initialDelaySeconds: 5
+    periodSeconds: 3
+    failureThreshold: 3
+  liveness:
+    httpGet:
+      path: /
+      port: http
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    failureThreshold: 3
+
 # Service configuration
 service:
   type: ClusterIP
@@ -90,9 +107,9 @@ resourceManagement:
     enabled: true
     hard:
       requests.cpu: '1'
-      limits.cpu: '1.5'
-      requests.memory: 1Gi
-      limits.memory: 2Gi
+      limits.cpu: '2'
+      requests.memory: 2Gi
+      limits.memory: 4Gi
   limitRange:
     enabled: true
     defaultLimit:
@@ -101,23 +118,6 @@ resourceManagement:
     defaultRequest:
       cpu: 100m
       memory: 256Mi
-
-# Probes configuration
-probes:
-  readiness:
-    httpGet:
-      path: /
-      port: http
-    initialDelaySeconds: 5
-    periodSeconds: 3
-    failureThreshold: 3
-  liveness:
-    httpGet:
-      path: /
-      port: http
-    initialDelaySeconds: 10
-    periodSeconds: 5
-    failureThreshold: 3
 
 # Traefik configuration
 traefik:
