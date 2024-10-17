@@ -1,29 +1,10 @@
 import AnalyticsDashboard from '@/components/analytics-dashboard'
-import { VisitorsChart } from '@/components/visitor-chart'
 import { analytics } from '@/lib/analytics'
-import { getDate } from '@/lib/utils'
 
 export default async function Page() {
   const TRACKING_DAYS = 7
 
   const pageviews = await analytics.retrieveLastDays('pageview', TRACKING_DAYS)
-
-  const totalPageviews = pageviews.reduce((acc, curr) => {
-    return (
-      acc + curr.events.reduce((acc, curr) => acc + Object.values(curr)[0]!, 0)
-    )
-  }, 0)
-
-  const avgVisitorsPerDay = (totalPageviews / TRACKING_DAYS).toFixed(1)
-
-  const amtVisitorsToday = pageviews
-    .filter(ev => ev.date === getDate())
-    .reduce((acc, curr) => {
-      return (
-        acc +
-        curr.events.reduce((acc, curr) => acc + Object.values(curr)[0]!, 0)
-      )
-    }, 0)
 
   const topCountriesMap = new Map<string, number>()
 
