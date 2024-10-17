@@ -27,5 +27,5 @@ export function formatUptime(uptime: number): string {
 
 export function getDate(subtract: number = 0): string {
   const dateXDaysAgo = subDays(new Date(), subtract)
-  return format(dateXDaysAgo, 'dd/MM/yyyy')
+  return format(dateXDaysAgo, 'MM/dd/yyyy')
 }
