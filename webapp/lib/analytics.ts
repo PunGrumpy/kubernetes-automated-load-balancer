@@ -21,7 +21,7 @@ interface DailyAnalytics {
 }
 
 export class Analytics {
-  private retentionPeriod: number = -1 // Set to -1 for no expiration
+  private retentionPeriod: number = 7 * 24 * 60 * 60 // 7 days
 
   constructor(options?: AnalyticsOptions) {
     if (options?.retention) {
