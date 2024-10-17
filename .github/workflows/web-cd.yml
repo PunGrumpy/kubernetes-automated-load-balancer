@@ -76,7 +76,7 @@ jobs:
           git pull origin main
       - name: 🚀 Update Helm Chart
         run: |
-          sed -i "s/^  tag: .*/  tag: ${{ github.sha }}/" helm/values.yaml
+          sed -i "s/^    tag: .*/    tag: ${{ github.sha }}/" helm/values.yaml
       - name: 📤 Commit and Push
         run: |
           git add helm/values.yaml
