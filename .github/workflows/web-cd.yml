@@ -47,7 +47,7 @@ jobs:
         uses: docker/scout-action@v1
         with:
           command: compare
-          image: ${{ steps.meta.outputs.tags }}
+          image: image://${{ steps.meta.outputs.tags }}
           to-env: production
           ignore-unchanged: true
           only-severities: critical,high
