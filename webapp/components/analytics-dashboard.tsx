@@ -6,12 +6,13 @@ import {
   ArrowUpIcon,
   BarChartIcon,
   GlobeIcon,
-  TrendingUpIcon,
-  UsersIcon
+  ServerIcon,
+  TrendingUpIcon
 } from 'lucide-react'
 import { useState } from 'react'
 import ReactCountryFlag from 'react-country-flag'
 
+import { RequestsChart } from '@/components/requests-chart'
 import {
   Card,
   CardContent,
@@ -20,25 +21,24 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { VisitorsChart } from '@/components/visitor-chart'
-import { useVisitorsData } from '@/hooks/useVisitorsData'
+import { useRequestsData } from '@/hooks/useRequestsData'
 
 interface AnalyticsDashboardProps {
-  timeseriesPageviews: any[]
+  timeseriesRequests: any[]
   topCountries: [string, number][]
 }
 
 export default function AnalyticsDashboard({
-  timeseriesPageviews,
+  timeseriesRequests,
   topCountries
 }: AnalyticsDashboardProps) {
   const [activeTab, setActiveTab] = useState('overview')
-  const { data, maxVisitors, totalVisitors, avgVisitorsPerDay } =
-    useVisitorsData(timeseriesPageviews)
+  const { data, maxRequests, totalRequests, avgRequestsPerDay } =
+    useRequestsData(timeseriesRequests)
 
-  const amtVisitorsToday = data[data.length - 1]?.visitors || 0
+  const amtRequestsToday = data[data.length - 1]?.requests || 0
   const percentageChange = (
-    (amtVisitorsToday / Number(avgVisitorsPerDay) - 1) *
+    (amtRequestsToday / Number(avgRequestsPerDay) - 1) *
     100
   ).toFixed(1)
 
@@ -55,41 +55,41 @@ export default function AnalyticsDashboard({
       <TabsContent value="overview" className="space-y-6">
         <div className="grid gap-6 md:grid-cols-2">
           <StatCard
-            title="Total Visitors Today"
-            value={amtVisitorsToday}
-            icon={<UsersIcon className="size-4 text-muted-foreground" />}
+            title="Total API Requests Today"
+            value={amtRequestsToday}
+            icon={<ServerIcon className="size-4 text-muted-foreground" />}
             trend={{
               value: Number(percentageChange),
               label: 'from average'
             }}
           />
           <StatCard
-            title="Avg. Visitors/Day"
-            value={avgVisitorsPerDay}
+            title="Avg. Requests/Day"
+            value={avgRequestsPerDay}
             icon={<BarChartIcon className="size-4 text-muted-foreground" />}
             description="Over the last 7 days"
           />
         </div>
-        <VisitorsChart data={data} />
+        <RequestsChart data={data} />
         <TopCountriesCard
           topCountries={topCountries}
-          totalVisitors={totalVisitors}
+          totalRequests={totalRequests}
         />
       </TabsContent>
       <TabsContent value="analytics" className="space-y-6">
-        <VisitorsChart data={data} />
+        <RequestsChart data={data} />
         <div className="grid gap-6 md:grid-cols-2">
           <StatCard
             title="Highest Traffic"
-            value={maxVisitors}
+            value={maxRequests}
             icon={<ArrowUpIcon className="size-4 text-muted-foreground" />}
-            description="visitors on peak day"
+            description="requests on peak day"
           />
           <StatCard
             title="Lowest Traffic"
-            value={Math.min(...data.map(d => d.visitors))}
+            value={Math.min(...data.map(d => d.requests))}
             icon={<ArrowDownIcon className="size-4 text-muted-foreground" />}
-            description="visitors on slowest day"
+            description="requests on slowest day"
           />
         </div>
       </TabsContent>
@@ -139,18 +139,18 @@ function StatCard({ title, value, icon, trend, description }: StatCardProps) {
 
 interface TopCountriesCardProps {
   topCountries: [string, number][]
-  totalVisitors: number
+  totalRequests: number
 }
 
 function TopCountriesCard({
   topCountries,
-  totalVisitors
+  totalRequests
 }: TopCountriesCardProps) {
   return (
     <Card className="transition-all duration-200 hover:bg-accent/5 hover:shadow-md">
       <CardHeader>
         <CardTitle>Top Countries</CardTitle>
-        <CardDescription>Top 5 countries by visitor count</CardDescription>
+        <CardDescription>Top 5 countries by request count</CardDescription>
       </CardHeader>
       <CardContent>
         <motion.div className="space-y-4">
@@ -176,11 +176,11 @@ function TopCountriesCard({
                   {countryCode}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  {number} visitors
+                  {number} requests
                 </p>
               </div>
               <div className="font-medium">
-                {((number / totalVisitors) * 100).toFixed(1)}%
+                {((number / totalRequests) * 100).toFixed(1)}%
               </div>
             </motion.div>
           ))}

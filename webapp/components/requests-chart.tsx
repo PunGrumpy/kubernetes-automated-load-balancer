@@ -20,25 +20,27 @@ import {
   ChartTooltipContent
 } from '@/components/ui/chart'
 
-interface VisitorsChartProps {
+interface RequestsChartProps {
   data: {
     date: string
-    visitors: number
+    requests: number
   }[]
 }
 
-export function VisitorsChart({ data }: VisitorsChartProps) {
+export function RequestsChart({ data }: RequestsChartProps) {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Visitors Overview</CardTitle>
-        <CardDescription>Daily visitor count for the past week</CardDescription>
+        <CardTitle>Requests Overview</CardTitle>
+        <CardDescription>
+          Daily API request count for the past week
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer
           config={{
-            visitors: {
-              label: 'Visitors',
+            requests: {
+              label: 'Requests',
               color: '#2563eb'
             }
           }}
@@ -51,7 +53,6 @@ export function VisitorsChart({ data }: VisitorsChartProps) {
               fontSize={12}
               tickLine={false}
               axisLine={false}
-              // 12/10/2024 -> 12 Oct
               tickFormatter={date =>
                 new Date(date).toLocaleDateString('en-US', {
                   day: 'numeric',
@@ -66,7 +67,7 @@ export function VisitorsChart({ data }: VisitorsChartProps) {
               tickFormatter={value => `${value}`}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
-            <Bar dataKey="visitors" fill="var(--color-visitors)" radius={4} />
+            <Bar dataKey="requests" fill="var(--color-requests)" radius={4} />
           </BarChart>
         </ChartContainer>
       </CardContent>
