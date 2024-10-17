@@ -41,17 +41,6 @@ jobs:
           tags: |
             ${{ github.sha }}
             latest
-      - name: 🪖 Docker Scout
-        id: docker-scout
-        if: ${{ github.event_name == 'pull_request' }}
-        uses: docker/scout-action@v1
-        with:
-          command: compare
-          image: local://${{ steps.meta.outputs.tags }}
-          to-env: production
-          ignore-unchanged: true
-          only-severities: critical,high
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: 🏗️ Build and Push
         uses: docker/build-push-action@v6
         with:
