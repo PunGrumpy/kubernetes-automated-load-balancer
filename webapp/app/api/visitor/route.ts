@@ -5,8 +5,8 @@ import { getGeo } from '@/lib/utils'
 
 export async function GET(request: NextRequest) {
   console.log(request)
-  let ip = request.headers.get('X-Forwarded-For')
-  const geo = await getGeo(ip || '8.8.8.8')
+  const ip = request.headers.get('X-Forwarded-For')?.split(',')[0] || 'Unknown'
+  const geo = await getGeo(ip)
   const country = geo || 'Unknown'
 
   try {
