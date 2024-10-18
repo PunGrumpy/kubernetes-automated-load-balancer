@@ -63,21 +63,21 @@ export function ApiUsageInsights({ data }: ApiUsageInsightsProps) {
             value={trend}
             icon={
               parseFloat(trend) >= 0 ? (
-                <TrendingUpIcon className="size-4 text-green-500" />
+                <TrendingUpIcon className="size-4" />
               ) : (
-                <TrendingDownIcon className="size-4 text-red-500" />
+                <TrendingDownIcon className="size-4" />
               )
             }
             trend={{
               value: parseFloat(trend),
-              label: 'over the past two weeks'
+              label: 'over the past week'
             }}
           />
           <Card className="w-full transition-all duration-200 hover:bg-accent/5 hover:shadow-md">
             <CardHeader>
               <CardTitle>Trend Overview</CardTitle>
               <CardDescription>
-                A detailed overview of the trend analysis for the 1 week
+                A detailed overview of the trend analysis for the last week.
               </CardDescription>
             </CardHeader>
             <ChartContainer
