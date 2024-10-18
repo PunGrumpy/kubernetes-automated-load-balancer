@@ -4,7 +4,7 @@ import { analytics } from '@/lib/analytics'
 import { getGeoFromIP } from '@/lib/utils'
 
 export async function GET(request: NextRequest) {
-  const ip = request.headers.get('X-Forwarded-For') || 'Unknown'
+  const ip = request.headers.get('X-Forwarded-For')?.split(',')[0] || 'Unknown'
   const geo = await getGeoFromIP(ip)
   const country = geo || 'Unknown'
 
