@@ -10,9 +10,3 @@ export function getDate(daysAgo: number = 0): string {
   date.setDate(date.getDate() - daysAgo)
   return date.toISOString().split('T')[0]
 }
-
-export async function getGeoFromIP(ip: string): Promise<string> {
-  const response = await fetch(`http://ip-api.com/json/${ip}`)
-  const data = await response.json()
-  return data.countryCode
-}
