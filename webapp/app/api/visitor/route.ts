@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 import { analytics } from '@/lib/analytics'
+import { getGeo } from '@/lib/utils'
 
 export async function GET(request: NextRequest) {
-  const country = request.geo?.country || 'Unknown'
+  const ip = request.headers.get('X-Forwarded-For') || 'Unknown'
+  const geo = await getGeo(ip)
+  const country = geo || 'Unknown'
 
   try {
     await analytics.track('api_request', { country })
