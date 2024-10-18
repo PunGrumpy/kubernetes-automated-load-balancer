@@ -14,7 +14,7 @@ deployment:
   progressDeadlineSeconds: 600
   image:
     repository: pungrumpy/kalb
-    tag: cbac8972aeb5102a92442813c816876cd33b8eb0
+    tag: de93768dbff6f9cc93ca1c3bafc5ce6e891cc3fc
     pullPolicy: IfNotPresent
   podAnnotations: {}
   podSecurityContext: {}
