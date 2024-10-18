@@ -5,7 +5,6 @@ import { getGeoFromIP } from '@/lib/utils'
 
 export async function GET(request: NextRequest) {
   const ip =
-    request.headers.get('X-Real-IP') ||
     request.headers.get('X-Forwarded-For')?.split(',')[0] ||
     request.ip ||
     'Unknown'
@@ -59,7 +58,6 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const ip =
-    request.headers.get('X-Real-IP') ||
     request.headers.get('X-Forwarded-For')?.split(',')[0] ||
     request.ip ||
     'Unknown'
