@@ -5,8 +5,9 @@ import { getGeoFromIP } from '@/lib/utils'
 
 export async function GET(request: NextRequest) {
   const ip =
-    request.headers.get('CF-Connecting-IP') ||
-    request.headers.get('X-Forwarded-For') ||
+    request.headers.get('X-Real-IP') ||
+    request.headers.get('X-Forwarded-For')?.split(',')[0] ||
+    request.ip ||
     'Unknown'
   const geo = await getGeoFromIP(ip)
   const country = geo || 'Unknown'
@@ -57,7 +58,14 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const country = request.geo?.country || 'Unknown'
+  const ip =
+    request.headers.get('X-Real-IP') ||
+    request.headers.get('X-Forwarded-For')?.split(',')[0] ||
+    request.ip ||
+    'Unknown'
+
+  const geo = await getGeoFromIP(ip)
+  const country = geo || 'Unknown'
 
   try {
     await analytics.track('api_request', { country })
