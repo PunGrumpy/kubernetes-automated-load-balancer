@@ -149,7 +149,7 @@ traefik:
             initialInterval: '100ms'
       - name: realip
         spec:
-          realIP:
+          realip:
             plugin:
               traefik-get-real-ip:
                 Proxy:
