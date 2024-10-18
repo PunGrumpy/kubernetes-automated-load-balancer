@@ -157,6 +157,8 @@ traefik:
                   realIP: Client-Ip
                   OverwriteXFF: true
                 - proxyHeadername: '*'
+                  realIP: CF-Connecting-IP
+                - proxyHeadername: '*'
                   realIP: X-Real-Ip
                   OverwriteXFF: true
                 - proxyHeadername: '*'
