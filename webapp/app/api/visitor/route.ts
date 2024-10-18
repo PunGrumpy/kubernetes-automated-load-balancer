@@ -6,9 +6,6 @@ import { getGeo } from '@/lib/utils'
 export async function GET(request: NextRequest) {
   console.log(request)
   let ip = request.headers.get('X-Forwarded-For')
-  if (ip?.includes('::ffff:')) {
-    ip = ip.replace('::ffff:', '')
-  }
   const geo = await getGeo(ip || '8.8.8.8')
   const country = geo || 'Unknown'
 
@@ -44,7 +41,7 @@ export async function GET(request: NextRequest) {
       .slice(0, 5)
 
     return NextResponse.json({
-      message: 'Request tracked successfully',
+      message: `Request tracked successfully from ${ip}`,
       timeseriesRequests: requests,
       topCountries
     })
