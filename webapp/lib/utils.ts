@@ -12,7 +12,7 @@ export function getDate(daysAgo: number = 0): string {
 }
 
 export async function getGeo(ip: string): Promise<string> {
-  const response = await fetch(`https://ipinfo.io/${ip}/json`)
+  const response = await fetch(`http://ip-api.com/json/${ip}`)
   const data = await response.json()
-  return data.country
+  return data.countryCode
 }
