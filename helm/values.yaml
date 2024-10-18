@@ -153,8 +153,8 @@ traefik:
             traefik-get-real-ip:
               Proxy:
                 - proxyHeadername: X-From-Cdn
-                  proxyHeadervalue: 1-cdn
-                  realIP: Client-Ip
+                  proxyHeadervalue: cf-foo
+                  realIP: X-Fowarded-For
                   OverwriteXFF: true
 
 # Pod Disruption Budget configuration
