@@ -153,16 +153,9 @@ traefik:
             traefik-get-real-ip:
               Proxy:
                 - proxyHeadername: X-From-Cdn
-                  proxyHeadervalue: mf-fun
-                  realIP: X-Forwarded-For
-                - proxyHeadername: X-From-Cdn
-                  proxyHeadervalue: mf-bar
-                  realIP: Client-Ip
-                  OverwriteXFF: true # default: false, v1.0.2 or above
-                - proxyHeadername: X-From-Cdn
                   proxyHeadervalue: cf-foo
                   realIP: Cf-Connecting-Ip
-                  OverwriteXFF: true # default: false, v1.0.2 or above
+                  OverwriteXFF: true
                 - proxyHeadername: '*'
                   realIP: RemoteAddr
 
