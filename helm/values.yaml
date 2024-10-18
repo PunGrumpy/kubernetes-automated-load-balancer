@@ -147,6 +147,24 @@ traefik:
           retry:
             attempts: 3
             initialInterval: '100ms'
+      - name: realip
+        spec:
+          plugin:
+            traefik-get-real-ip:
+              Proxy:
+                - proxyHeadername: X-From-Cdn
+                  proxyHeadervalue: mf-fun
+                  realIP: X-Forwarded-For
+                - proxyHeadername: X-From-Cdn
+                  proxyHeadervalue: mf-bar
+                  realIP: Client-Ip
+                  OverwriteXFF: true # default: false, v1.0.2 or above
+                - proxyHeadername: X-From-Cdn
+                  proxyHeadervalue: cf-foo
+                  realIP: Cf-Connecting-Ip
+                  OverwriteXFF: true # default: false, v1.0.2 or above
+                - proxyHeadername: '*'
+                  realIP: RemoteAddr
 
 # Pod Disruption Budget configuration
 podDisruptionBudget:
