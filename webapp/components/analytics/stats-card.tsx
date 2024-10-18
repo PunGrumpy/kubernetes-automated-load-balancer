@@ -3,7 +3,7 @@ import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-const MotionCard = motion(Card)
+const MotionCard = motion.create(Card)
 
 interface StatCardProps {
   title: string

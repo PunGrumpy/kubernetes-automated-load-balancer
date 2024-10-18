@@ -15,7 +15,7 @@ interface TopCountriesCardProps {
   totalRequests: number
 }
 
-const MotionCard = motion(Card)
+const MotionCard = motion.create(Card)
 
 export function TopCountriesCard({
   topCountries,

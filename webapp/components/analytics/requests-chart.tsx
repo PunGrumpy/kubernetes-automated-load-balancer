@@ -28,7 +28,7 @@ interface RequestsChartProps {
   }[]
 }
 
-const MotionCard = motion(Card)
+const MotionCard = motion.create(Card)
 
 export function RequestsChart({ data }: RequestsChartProps) {
   return (
