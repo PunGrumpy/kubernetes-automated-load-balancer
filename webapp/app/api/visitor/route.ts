@@ -4,8 +4,12 @@ import { analytics } from '@/lib/analytics'
 import { getGeo } from '@/lib/utils'
 
 export async function GET(request: NextRequest) {
-  const ip = request.headers.get('X-Forwarded-For') || 'Unknown'
-  const geo = await getGeo(ip)
+  console.log(request)
+  let ip = request.headers.get('X-Forwarded-For')
+  if (ip?.includes('::ffff:')) {
+    ip = ip.replace('::ffff:', '')
+  }
+  const geo = await getGeo(ip || '8.8.8.8')
   const country = geo || 'Unknown'
 
   try {
