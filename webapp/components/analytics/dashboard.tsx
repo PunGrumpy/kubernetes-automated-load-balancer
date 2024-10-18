@@ -1,38 +1,62 @@
 'use client'
 
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  BarChartIcon,
-  ServerIcon
-} from 'lucide-react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { BarChartIcon } from 'lucide-react'
 import { useState } from 'react'
 
+import { RequestsChart } from '@/components/analytics/requests-chart'
 import { StatCard } from '@/components/analytics/stats-card'
 import { TopCountriesCard } from '@/components/analytics/top-countries'
-import { RequestsChart } from '@/components/requests-chart'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useRequestsData } from '@/hooks/useRequestsData'
 import { TimeSeriesRequest, TopCountry } from '@/types'
 
 interface AnalyticsDashboardProps {
-  timeseriesRequests?: TimeSeriesRequest[]
-  topCountries?: TopCountry[]
+  timeseriesRequests: TimeSeriesRequest[]
+  topCountries: TopCountry[]
 }
 
-export default function AnalyticsDashboard({
+export function AnalyticsDashboard({
   timeseriesRequests,
   topCountries
 }: AnalyticsDashboardProps) {
   const [activeTab, setActiveTab] = useState('overview')
-  const { data, maxRequests, totalRequests, avgRequestsPerDay } =
-    useRequestsData(timeseriesRequests || [])
 
-  const amtRequestsToday = data[data.length - 1]?.requests || 0
-  const percentageChange = (
-    (amtRequestsToday / Number(avgRequestsPerDay) - 1) *
-    100
-  ).toFixed(1)
+  const totalRequests = timeseriesRequests.reduce(
+    (sum, day) =>
+      sum +
+      day.events.reduce((daySum, event) => daySum + Object.values(event)[0], 0),
+    0
+  )
+
+  const avgRequestsPerDay = (totalRequests / timeseriesRequests.length).toFixed(
+    2
+  )
+
+  const data = timeseriesRequests.map(day => ({
+    date: day.date,
+    requests: day.events.reduce(
+      (sum, event) => sum + Object.values(event)[0],
+      0
+    )
+  }))
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1
+    }
+  }
 
   return (
     <Tabs
@@ -42,51 +66,56 @@ export default function AnalyticsDashboard({
     >
       <TabsList className="mb-8 grid w-full grid-cols-2">
         <TabsTrigger value="overview">Overview</TabsTrigger>
-        <TabsTrigger value="analytics">Analytics</TabsTrigger>
+        <TabsTrigger value="countries">Top Countries</TabsTrigger>
       </TabsList>
-      <TabsContent value="overview" className="space-y-6">
-        <div className="grid gap-6 md:grid-cols-2">
-          <StatCard
-            title="Total API Requests Today"
-            value={amtRequestsToday}
-            icon={<ServerIcon className="size-4 text-muted-foreground" />}
-            trend={{
-              value: Number(percentageChange),
-              label: 'from average'
-            }}
-          />
-          <StatCard
-            title="Avg. Requests/Day"
-            value={avgRequestsPerDay}
-            icon={<BarChartIcon className="size-4 text-muted-foreground" />}
-            description="Over the last 7 days"
-          />
-        </div>
-        <RequestsChart data={data} />
-        {topCountries && (
-          <TopCountriesCard
-            topCountries={topCountries}
-            totalRequests={totalRequests}
-          />
-        )}
-      </TabsContent>
-      <TabsContent value="analytics" className="space-y-6">
-        <RequestsChart data={data} />
-        <div className="grid gap-6 md:grid-cols-2">
-          <StatCard
-            title="Highest Traffic"
-            value={maxRequests}
-            icon={<ArrowUpIcon className="size-4 text-muted-foreground" />}
-            description="requests on peak day"
-          />
-          <StatCard
-            title="Lowest Traffic"
-            value={Math.min(...data.map(d => d.requests))}
-            icon={<ArrowDownIcon className="size-4 text-muted-foreground" />}
-            description="requests on slowest day"
-          />
-        </div>
-      </TabsContent>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+        >
+          <TabsContent value="overview" className="space-y-6">
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              className="grid gap-6 md:grid-cols-2"
+            >
+              <motion.div variants={itemVariants}>
+                <StatCard
+                  title="Total API Requests"
+                  value={totalRequests}
+                  icon={
+                    <BarChartIcon className="size-4 text-muted-foreground" />
+                  }
+                  description="Over the last 7 days"
+                />
+              </motion.div>
+              <motion.div variants={itemVariants}>
+                <StatCard
+                  title="Avg. Requests/Day"
+                  value={avgRequestsPerDay}
+                  icon={
+                    <BarChartIcon className="size-4 text-muted-foreground" />
+                  }
+                  description="Over the last 7 days"
+                />
+              </motion.div>
+            </motion.div>
+            <motion.div variants={itemVariants}>
+              <RequestsChart data={data} />
+            </motion.div>
+          </TabsContent>
+          <TabsContent value="countries" className="space-y-6">
+            <TopCountriesCard
+              topCountries={topCountries}
+              totalRequests={totalRequests}
+            />
+          </TabsContent>
+        </motion.div>
+      </AnimatePresence>
     </Tabs>
   )
 }

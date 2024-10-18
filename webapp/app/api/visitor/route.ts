@@ -2,33 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { analytics } from '@/lib/analytics'
 
-export const dynamic = 'force-dynamic'
-
-export async function POST(request: NextRequest) {
-  const body = await request.json()
-  const { country } = body
-
-  if (!country) {
-    return NextResponse.json({ error: 'Country is required' }, { status: 400 })
-  }
+export async function GET(request: NextRequest) {
+  const country = request.geo?.country || 'Unknown'
 
   try {
-    await analytics.track('api_request', {
-      country
-    })
+    await analytics.track('api_request', { country })
 
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    console.error('Error tracking API request:', error)
-    return NextResponse.json(
-      { error: 'Failed to track API request' },
-      { status: 500 }
-    )
-  }
-}
-
-export async function GET() {
-  try {
     const TRACKING_DAYS = 7
     const requests = await analytics.retrieveLastDays(
       'api_request',
@@ -58,13 +37,29 @@ export async function GET() {
       .slice(0, 5)
 
     return NextResponse.json({
+      message: 'Request tracked successfully',
       timeseriesRequests: requests,
       topCountries
     })
   } catch (error) {
-    console.error('Error retrieving API request data:', error)
+    console.error('Error tracking API request:', error)
     return NextResponse.json(
-      { error: 'Failed to retrieve API request data' },
+      { error: 'Failed to track request' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function POST(request: NextRequest) {
+  const country = request.geo?.country || 'Unknown'
+
+  try {
+    await analytics.track('api_request', { country })
+    return NextResponse.json({ message: 'Request tracked successfully' })
+  } catch (error) {
+    console.error('Error tracking API request:', error)
+    return NextResponse.json(
+      { error: 'Failed to track request' },
       { status: 500 }
     )
   }

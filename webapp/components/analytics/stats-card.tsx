@@ -1,6 +1,9 @@
-import { TrendingUpIcon } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+
+const MotionCard = motion(Card)
 
 interface StatCardProps {
   title: string
@@ -21,29 +24,54 @@ export function StatCard({
   description
 }: StatCardProps) {
   return (
-    <Card className="transition-all duration-200 hover:bg-accent/5 hover:shadow-md">
+    <MotionCard
+      className="transition-all duration-200 hover:bg-accent/5 hover:shadow-md"
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+    >
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         {icon}
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
+        <motion.div
+          className="text-2xl font-bold"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          {value}
+        </motion.div>
         {trend && (
-          <div className="mt-2 flex items-center text-xs text-muted-foreground">
-            <TrendingUpIcon
-              className={`mr-1 size-4 ${trend.value >= 0 ? 'text-green-500' : 'text-red-500'}`}
-            />
+          <motion.div
+            className="mt-2 flex items-center text-xs text-muted-foreground"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            {trend.value >= 0 ? (
+              <TrendingUpIcon className="mr-1 size-4 text-green-500" />
+            ) : (
+              <TrendingDownIcon className="mr-1 size-4 text-red-500" />
+            )}
             <span
               className={trend.value >= 0 ? 'text-green-500' : 'text-red-500'}
             >
               {trend.value}% {trend.label}
             </span>
-          </div>
+          </motion.div>
         )}
         {description && (
-          <p className="mt-2 text-xs text-muted-foreground">{description}</p>
+          <motion.p
+            className="mt-2 text-xs text-muted-foreground"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            {description}
+          </motion.p>
         )}
       </CardContent>
-    </Card>
+    </MotionCard>
   )
 }

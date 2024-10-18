@@ -6,7 +6,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function getDate(subtract: number = 0): string {
-  const dateXDaysAgo = subDays(new Date(), subtract)
-  return format(dateXDaysAgo, 'MM/dd/yyyy')
+export function getDate(daysAgo: number = 0): string {
+  const date = new Date()
+  date.setDate(date.getDate() - daysAgo)
+  return date.toISOString().split('T')[0]
 }

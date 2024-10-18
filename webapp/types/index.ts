@@ -1,6 +1,6 @@
 export type TimeSeriesRequest = {
   date: string
-  requests: number
+  events: Record<string, number>[]
 }
 
 export type TopCountry = [string, number]

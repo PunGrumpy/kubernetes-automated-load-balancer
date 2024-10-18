@@ -1,15 +1,5 @@
-import { parse } from 'date-fns'
-
 import { redis } from '@/lib/db'
 import { getDate } from '@/lib/utils'
-
-interface AnalyticsOptions {
-  retention?: number
-}
-
-interface TrackSettings {
-  persistent?: boolean
-}
 
 interface AnalyticsEvent {
   [key: string]: number
@@ -23,31 +13,12 @@ interface DailyAnalytics {
 export class Analytics {
   private retentionPeriod: number = 7 * 24 * 60 * 60 // 7 days
 
-  constructor(options?: AnalyticsOptions) {
-    if (options?.retention) {
-      this.retentionPeriod = options.retention
-    }
-  }
-
-  async track(
-    namespace: string,
-    event: object = {},
-    settings?: TrackSettings
-  ): Promise<void> {
-    let key = `analytics::${namespace}`
-
-    if (!settings?.persistent) {
-      key += `::${getDate()}`
-    }
+  async track(namespace: string, event: object = {}): Promise<void> {
+    const key = `analytics::${namespace}::${getDate()}`
 
     try {
-      // Persist event to Redis
       await redis.hincrby(key, JSON.stringify(event), 1)
-
-      // Set expiration if event is not persistent and retentionPeriod is not -1
-      if (!settings?.persistent && this.retentionPeriod !== -1) {
-        await redis.expire(key, this.retentionPeriod)
-      }
+      await redis.expire(key, this.retentionPeriod)
     } catch (error) {
       console.error('Error tracking analytics:', error)
     }
@@ -64,13 +35,8 @@ export class Analytics {
 
     try {
       const results = await Promise.all(retrievePromises)
-
-      // Sort results by date
-      return results.sort((a, b) =>
-        parse(a.date, 'dd/MM/yyyy', new Date()) >
-        parse(b.date, 'dd/MM/yyyy', new Date())
-          ? 1
-          : -1
+      return results.sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
       )
     } catch (error) {
       console.error('Error retrieving analytics:', error)
@@ -78,13 +44,15 @@ export class Analytics {
     }
   }
 
-  async retrieve(namespace: string, date: string): Promise<DailyAnalytics> {
+  private async retrieve(
+    namespace: string,
+    date: string
+  ): Promise<DailyAnalytics> {
     try {
       const events = await redis.hgetall<Record<string, string>>(
         `analytics::${namespace}::${date}`
       )
 
-      // Convert retrieved events to array of key-value pairs
       return {
         date,
         events: Object.entries(events ?? {}).map(([key, value]) => ({

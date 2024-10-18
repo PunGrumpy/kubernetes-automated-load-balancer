@@ -1,38 +1,29 @@
 import { useMemo } from 'react'
 
-interface RequestsData {
-  date: string
-  requests: number
-}
+import { TimeSeriesRequest } from '@/types'
 
-export const useRequestsData = (timeseriesRequests: any[]) => {
-  const data: RequestsData[] = useMemo(() => {
+export function useRequestsData(timeseriesRequests: TimeSeriesRequest[]) {
+  const data = useMemo(() => {
     return timeseriesRequests.map(day => ({
       date: day.date,
       requests: day.events.reduce(
-        (acc: number, curr: any) => acc + Number(Object.values(curr)[0]!),
+        (sum, event) => sum + Object.values(event)[0],
         0
       )
     }))
   }, [timeseriesRequests])
 
-  const maxRequests = useMemo(
-    () => Math.max(...data.map(item => item.requests), 1),
-    [data]
-  )
-  const totalRequests = useMemo(
-    () => data.reduce((acc, curr) => acc + curr.requests, 0),
-    [data]
-  )
-  const avgRequestsPerDay = useMemo(
-    () => (totalRequests / data.length).toFixed(1),
-    [totalRequests, data]
-  )
+  const totalRequests = useMemo(() => {
+    return data.reduce((sum, day) => sum + day.requests, 0)
+  }, [data])
 
-  return {
-    data,
-    maxRequests,
-    totalRequests,
-    avgRequestsPerDay
-  }
+  const maxRequests = useMemo(() => {
+    return Math.max(...data.map(day => day.requests))
+  }, [data])
+
+  const avgRequestsPerDay = useMemo(() => {
+    return (totalRequests / data.length).toFixed(2)
+  }, [totalRequests, data])
+
+  return { data, totalRequests, maxRequests, avgRequestsPerDay }
 }
