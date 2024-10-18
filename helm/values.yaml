@@ -157,7 +157,10 @@ traefik:
                   realIP: Client-Ip
                   OverwriteXFF: true
                 - proxyHeadername: '*'
-                  realIP: Cf-Connecting-Ip
+                  realIP: X-Real-Ip
+                  OverwriteXFF: true
+                - proxyHeadername: '*'
+                  realIP: X-Forwarded-For
                   OverwriteXFF: true
 
 # Pod Disruption Budget configuration
