@@ -21,6 +21,8 @@ ports:
     tls:
       enabled: true
       certResolver: cloudflare
+    forwardHeaders:
+      insecure: true
 
 env:
   - name: CF_API_EMAIL
