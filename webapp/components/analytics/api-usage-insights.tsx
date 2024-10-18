@@ -130,7 +130,19 @@ export function ApiUsageInsights({ data }: ApiUsageInsightsProps) {
                     axisLine={false}
                     tickFormatter={value => `${value}`}
                   />
-                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <ChartTooltip
+                    content={
+                      <ChartTooltipContent
+                        labelFormatter={date =>
+                          new Date(date).toLocaleDateString('en-US', {
+                            day: '2-digit',
+                            month: 'short',
+                            year: 'numeric'
+                          })
+                        }
+                      />
+                    }
+                  />
                   <Area
                     type="monotone"
                     dataKey="requests"
