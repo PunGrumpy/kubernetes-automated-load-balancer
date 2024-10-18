@@ -154,7 +154,7 @@ traefik:
               Proxy:
                 - proxyHeadername: X-From-Cdn
                   proxyHeadervalue: cf-foo
-                  realIP: X-Fowarded-For
+                  realIP: Client-Ip
                   OverwriteXFF: true
 
 # Pod Disruption Budget configuration
