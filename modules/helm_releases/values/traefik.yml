@@ -81,9 +81,9 @@ deployment:
       image: busybox:1.36.1
       command:
         [
-          'sh',
-          '-c',
-          'touch /ssl-certs/acme-cloudflare.json; chmod -Rv 600 /ssl-certs/*'
+          "sh",
+          "-c",
+          "touch /ssl-certs/acme-cloudflare.json; chmod -Rv 600 /ssl-certs/*",
         ]
       volumeMounts:
         - name: ssl-certs
@@ -100,10 +100,9 @@ metrics:
     addRoutersLabels: true
     addEntryPointsLabels: true
     addServicesLabels: true
-
 # Plugins
-experimental:
-  plugins:
-    traefik-get-real-ip:
-      moduleName: 'github.com/Paxxs/traefik-get-real-ip'
-      version: 'v1.0.3'
+# experimental:
+#   plugins:
+#     traefik-get-real-ip:
+#       moduleName: 'github.com/Paxxs/traefik-get-real-ip'
+#       version: 'v1.0.3'
