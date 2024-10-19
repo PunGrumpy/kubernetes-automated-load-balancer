@@ -1,0 +1,38 @@
+{
+  "timeseriesRequests": [
+    {
+      "date": "2023-04-01",
+      "events": [
+        {
+          "{\"browser\":\"Chrome\",\"isBot\":false}": 50
+        },
+        {
+          "{\"browser\":\"Firefox\",\"isBot\":false}": 30
+        },
+        {
+          "{\"browser\":\"Safari\",\"isBot\":false}": 20
+        },
+        {
+          "{\"browser\":\"Bot\",\"isBot\":true}": 5
+        }
+      ]
+    },
+    {
+      "date": "2023-04-02",
+      "events": [
+        {
+          "{\"browser\":\"Chrome\",\"isBot\":false}": 60
+        },
+        {
+          "{\"browser\":\"Firefox\",\"isBot\":false}": 35
+        },
+        {
+          "{\"browser\":\"Safari\",\"isBot\":false}": 25
+        },
+        {
+          "{\"browser\":\"Bot\",\"isBot\":true}": 7
+        }
+      ]
+    }
+  ]
+}
