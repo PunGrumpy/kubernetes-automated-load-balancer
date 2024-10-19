@@ -109,14 +109,17 @@ export function DeviceInsights({ deviceData }: DeviceInsightsProps) {
         </CardFooter>
       </Card>
 
-      <Card>
-        <CardHeader>
+      <Card
+        className={
+          isBotTrafficHigh ? 'border border-destructive bg-destructive/5' : ''
+        }
+      >
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle>Bot Traffic</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <BotIcon className="size-8" />
               <div>
                 <p className="text-2xl font-semibold">{deviceData.bots}</p>
                 <p className="text-sm text-muted-foreground">Bot Requests</p>
