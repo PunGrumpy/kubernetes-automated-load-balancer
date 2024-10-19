@@ -7,7 +7,7 @@ WORKDIR /app
 # Install dependencies
 FROM base AS dependencies
 COPY package.json bun.lockb ./
-RUN bun install
+RUN bun install --frozen-lockfile --production
 
 # Build the app
 FROM base AS builder
