@@ -63,9 +63,9 @@ jobs:
       - name: 🐳 Scout Scan
         uses: docker/scout-action@v1
         with:
-          environment: ${{ (github.event_name == 'push' && github.ref_name == 'main' && 'stage') || (github.event_name == 'pull_request' && 'dev') }}
+          to-env: production
           command: cves,recommendations,compare,environment
-          image: pungrumpy/kalb:${{ github.sha }}
+          image: ${{ steps.meta.outputs.tags }}
           to: pungrumpy/kalb:latest
           ignore-unchanged: true
           only-severities: critical,high
