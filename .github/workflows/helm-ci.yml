@@ -27,3 +27,20 @@ jobs:
         uses: azure/setup-helm@v4
       - name: 🧹 Lint
         run: helm lint helm
+
+  minikube:
+    name: 🚢 Minikube Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+      - name: 🚀 Setup Minikube
+        uses: medyagh/setup-minikube@latest
+      - name: 🧪 Try the Cluster
+        run: kubectl get all --all-namespaces
+      - name: 🚀 Setup Helm
+        uses: azure/setup-helm@v4
+      - name: 🚢 Deploy
+        run: helm upgrade --install --namespace kalb --create-namespace kalb helm
+      - name: 🧪 Test the Deployment
+        run: kubectl get all --namespace kalb
