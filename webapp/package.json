@@ -10,6 +10,7 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "start": "next start",
+    "test:ci": "cypress run --record --key $CYPRESS_RECORD_KEY",
     "test:open": "cypress open",
     "test:run": "cypress run"
   },
