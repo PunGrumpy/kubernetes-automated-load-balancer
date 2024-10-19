@@ -1,5 +1,3 @@
-'use client'
-
 import { BotIcon, TrendingDown, TrendingUp } from 'lucide-react'
 import { Bar, BarChart, CartesianGrid, Rectangle, XAxis } from 'recharts'
 
@@ -133,9 +131,9 @@ export function DeviceInsights({ deviceData }: DeviceInsightsProps) {
           <div className="flex gap-2 font-medium leading-none">
             {isBotTrafficHigh ? 'High bot traffic' : 'Normal bot traffic'}
             {isBotTrafficHigh ? (
-              <TrendingUp className="size-4 text-destructive" />
+              <TrendingUp className="size-4 text-[#f44336]" />
             ) : (
-              <TrendingDown className="size-4 text-muted-foreground" />
+              <TrendingDown className="size-4 text-[#4caf50]" />
             )}
           </div>
           <div className="leading-none text-muted-foreground">

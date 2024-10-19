@@ -1,4 +1,4 @@
-import { BarChartIcon, LineChartIcon } from 'lucide-react'
+import { ActivityIcon, BarChartIcon, LineChartIcon } from 'lucide-react'
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 
 import { StatCard } from '@/components/analytics/stats-card'
@@ -70,7 +70,7 @@ export function Overview({
               className="mx-auto aspect-square max-h-[250px] w-full max-w-5xl"
             >
               <BarChart data={data}>
-                <CartesianGrid vertical={false} stroke="hsl(var(--border))" />
+                <CartesianGrid vertical={false} />
                 <XAxis
                   dataKey="date"
                   fontSize={12}
@@ -99,7 +99,7 @@ export function Overview({
                 <Bar
                   dataKey="requests"
                   fill="var(--color-requests)"
-                  radius={4}
+                  radius={8}
                 />
               </BarChart>
             </ChartContainer>
@@ -108,7 +108,7 @@ export function Overview({
             <div className="flex gap-2 font-medium leading-none">
               Most requests is {maxRequests} (
               {((maxRequests / totalRequests) * 100).toFixed(1)}%)
-              <BarChartIcon className="size-4" />
+              <ActivityIcon className="size-4" />
             </div>
             <div className="leading-none text-muted-foreground">
               Based on total in the last 7 days
