@@ -35,7 +35,7 @@ concurrency:
 
 jobs:
   trivy-scan:
-    name: 🕵️ Scan Docker Image
+    name: 🕵️ Trivy Scan
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout
@@ -55,7 +55,7 @@ jobs:
         with:
           sarif_file: 'trivy-results.sarif'
   scout-scan:
-    name: 🕵️ Scan Docker Image
+    name: 🕵️ Scout Scan
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout
@@ -68,6 +68,7 @@ jobs:
       - name: 🐳 Scout Scan
         uses: docker/scout-action@v1
         with:
+          environment: ${{ (github.event_name == 'push' && github.ref_name == 'main' && 'prod') || (github.event_name == 'pull_request' && 'dev') }}
           command: cves,recommendations,compare,environment
           image: 'pungrumpy/kalb:latest'
           ignore-base: true
