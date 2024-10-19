@@ -141,7 +141,7 @@ traefik:
         spec:
           rateLimit:
             average: 100
-            burst: 50
+            burst: 200
       - name: retry
         spec:
           retry:
