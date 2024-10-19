@@ -18,8 +18,30 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  cypress-test:
+    name: 🧪 Cypress Test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2]
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+      - name: 🧑‍🔬 Cypress Run
+        uses: cypress-io/github-action@v6
+        with:
+          start: npm start
+          wait-on: 'http://localhost:3000'
+          record: true
+          parallel: true
+          env: |
+            CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   build-and-push:
     name: ⚒️ Build and Push Docker Image
+    needs: cypress-test
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
