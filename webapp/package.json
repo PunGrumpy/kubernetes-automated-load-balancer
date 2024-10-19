@@ -10,9 +10,10 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "start": "next start",
+    "test:ci": "cypress run --record --key $CYPRESS_RECORD_KEY",
     "test:clear": "cypress cache clear",
     "test:open": "cypress open",
-    "test:run": "cypress run"
+    "test:parallel": "cypress run --parallel"
   },
   "resolutions": {
     "react-is": "^19.0.0-rc-fb9a90fa48-20240614"

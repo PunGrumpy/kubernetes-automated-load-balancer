@@ -54,7 +54,8 @@ jobs:
           bunx cypress version --component node
         working-directory: webapp
       - name: 🧪 Run Cypress Tests
-        run: bun run test:ci
+        run: |
+          bunx cypress run --record --parallel --group ${{ matrix.containers }}
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           CYPRESS_CI: 1
