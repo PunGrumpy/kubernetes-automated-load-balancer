@@ -1,4 +1,4 @@
-name: 🔍 Trivy Nightly Docker Image Scan
+name: 🔍 Nightly Docker Image Scan
 
 on:
   push:
@@ -6,13 +6,13 @@ on:
       - main
     paths:
       - 'webapp/**'
-      - '.github/workflows/trivy-docker.yml'
+      - '.github/workflows/docker.yml'
   pull_request:
     branches:
       - main
     paths:
       - 'webapp/**'
-      - '.github/workflows/trivy-docker.yml'
+      - '.github/workflows/docker.yml'
   schedule:
     # Run at 12:00 AM UTC (5:00 PM PST) every day
     - cron: '0 17 * * *'
@@ -34,7 +34,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  scan:
+  trivy-scan:
     name: 🕵️ Scan Docker Image
     runs-on: ubuntu-latest
     steps:
@@ -54,3 +54,18 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'trivy-results.sarif'
+  scout-scan:
+    name: 🕵️ Scan Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+      - name: 🐳 Scout Scan
+        uses: docker/scout-action@v1
+        with:
+          image: 'pungrumpy/kalb:latest'
+          ignore-base: true
+          ignore-unchanged: true
+          only-fixed: true
+          only-severities: critical,high
+          github-token: ${{ secrets.GITHUB_TOKEN }}
