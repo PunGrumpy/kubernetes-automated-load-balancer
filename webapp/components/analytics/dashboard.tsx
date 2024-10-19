@@ -1,6 +1,6 @@
 'use client'
 
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
 
 import { DeviceInsights } from '@/components/analytics/device-insights'
@@ -20,16 +20,6 @@ export function AnalyticsDashboard({
   const { data, totalRequests, avgRequestsPerDay, maxRequests, deviceData } =
     useRequestsData(timeseriesRequests)
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  }
-
   return (
     <Tabs
       value={activeTab}
@@ -41,12 +31,7 @@ export function AnalyticsDashboard({
         <TabsTrigger value="insights">Insights</TabsTrigger>
       </TabsList>
       <AnimatePresence mode="wait">
-        <motion.div
-          key={activeTab}
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
+        <div key={activeTab}>
           <TabsContent value="overview" className="space-y-6">
             <Overview
               data={data}
@@ -58,7 +43,7 @@ export function AnalyticsDashboard({
           <TabsContent value="insights" className="space-y-6">
             <DeviceInsights deviceData={deviceData} />
           </TabsContent>
-        </motion.div>
+        </div>
       </AnimatePresence>
     </Tabs>
   )
