@@ -1,10 +1,17 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse, userAgent } from 'next/server'
 
 import { analytics } from '@/lib/analytics'
+import { DeviceData } from '@/types'
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const { browser, isBot } = userAgent(request)
+  const deviceData: DeviceData = {
+    browser: browser.name || 'Unknown',
+    isBot
+  }
+
   try {
-    await analytics.track('api_request')
+    await analytics.track('api_request', deviceData)
 
     const TRACKING_DAYS = 7
     const requests = await analytics.retrieveLastDays(

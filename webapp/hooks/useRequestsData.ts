@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { TimeSeriesRequest } from '@/types'
+import { DeviceData, TimeSeriesRequest } from '@/types'
 
 export function useRequestsData(timeseriesRequests: TimeSeriesRequest[]) {
   const data = useMemo(() => {
@@ -25,5 +25,27 @@ export function useRequestsData(timeseriesRequests: TimeSeriesRequest[]) {
     return (totalRequests / data.length).toFixed(2)
   }, [totalRequests, data])
 
-  return { data, totalRequests, maxRequests, avgRequestsPerDay }
+  const deviceData = useMemo(() => {
+    const browsers: Record<string, number> = {}
+    const deviceTypes: Record<string, number> = {}
+    let bots = 0
+    let total = 0
+
+    timeseriesRequests.forEach(day => {
+      day.events.forEach(event => {
+        const { browser, isBot } = JSON.parse(
+          Object.keys(event)[0]
+        ) as DeviceData
+        const count = Object.values(event)[0] as number
+
+        browsers[browser] = (browsers[browser] || 0) + count
+        if (isBot) bots += count
+        total += count
+      })
+    })
+
+    return { browsers, deviceTypes, bots, total }
+  }, [timeseriesRequests])
+
+  return { data, totalRequests, maxRequests, avgRequestsPerDay, deviceData }
 }
