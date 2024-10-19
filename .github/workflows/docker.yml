@@ -68,6 +68,7 @@ jobs:
       - name: 🐳 Scout Scan
         uses: docker/scout-action@v1
         with:
+          command: cves,recommendations,compare,environment
           image: 'pungrumpy/kalb:latest'
           ignore-base: true
           ignore-unchanged: true
