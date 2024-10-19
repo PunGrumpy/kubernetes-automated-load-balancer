@@ -6,10 +6,13 @@ export function useRequestsData(timeseriesRequests: TimeSeriesRequest[]) {
   const data = useMemo(() => {
     return timeseriesRequests.map(day => ({
       date: day.date,
-      requests: day.events.reduce(
-        (sum, event) => sum + Object.values(event)[0],
-        0
-      )
+      requests:
+        day.events && Array.isArray(day.events)
+          ? day.events.reduce(
+              (sum, event) => sum + ((Object.values(event)[0] as number) || 0),
+              0
+            )
+          : 0
     }))
   }, [timeseriesRequests])
 
@@ -32,18 +35,21 @@ export function useRequestsData(timeseriesRequests: TimeSeriesRequest[]) {
     let total = 0
 
     timeseriesRequests.forEach(day => {
-      day.events.forEach(event => {
-        const { browser, isBot } = JSON.parse(
-          Object.keys(event)[0]
-        ) as DeviceData
-        const count = Object.values(event)[0] as number
+      if (day.events && Array.isArray(day.events)) {
+        day.events.forEach(event => {
+          const eventKey = Object.keys(event)[0]
+          if (eventKey) {
+            const { browser, isBot } = JSON.parse(eventKey) as DeviceData
+            const count = (Object.values(event)[0] as number) || 0
 
-        const browserName = browser.includes('Safari') ? 'Safari' : browser
+            const browserName = browser.includes('Safari') ? 'Safari' : browser
 
-        browsers[browserName] = (browsers[browserName] || 0) + count
-        if (isBot) bots += count
-        total += count
-      })
+            browsers[browserName] = (browsers[browserName] || 0) + count
+            if (isBot) bots += count
+            total += count
+          }
+        })
+      }
     })
 
     return { browsers, deviceTypes, bots, total }
