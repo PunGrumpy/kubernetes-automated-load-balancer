@@ -76,3 +76,4 @@ jobs:
           only-fixed: true
           only-severities: critical,high
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          organization: 'pungrumpy'
