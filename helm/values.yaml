@@ -124,7 +124,6 @@ traefik:
   ingressRoute:
     enabled: true
     entryPoints:
-      - web
       - websecure
     routes:
       - match: Host(`pungrumpy.xyz`)
