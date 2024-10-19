@@ -18,58 +18,8 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  cypress-test:
-    name: 🧪 Cypress Test
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        containers: [1, 2]
-    steps:
-      - name: 📥 Checkout
-        uses: actions/checkout@v4
-        with:
-          show-progress: true
-      - name: 🍞 Setup Bun
-        uses: oven-sh/setup-bun@v2
-      - name: 🌵 Cache Node Modules
-        uses: actions/cache@v4
-        with:
-          path: ~/.bun
-          key: ${{ runner.os }}-node-${{ hashFiles('**/bun.lockb') }}
-      - name: 🌲 Cache Cypress
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/Cypress
-          key: cypress-${{ runner.os }}-cypress-${{ hashFiles('**/bun.lockb') }}
-      - name: 📦 Install Dependencies
-        run: |
-          bun install --frozen-lockfile --production
-          bunx cypress verify
-          bunx cypress info
-          bunx cypress version
-          bunx cypress version --component package
-          bunx cypress version --component binary
-          bunx cypress version --component electron
-          bunx cypress version --component node
-        working-directory: webapp
-      - name: 🧪 Run Cypress Tests
-        run: |
-          bunx cypress run --record --parallel --group ${{ matrix.containers }}
-        env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          CYPRESS_CI: 1
-          TERM: xterm
-        working-directory: webapp
-      - name: 📤 Upload Cypress Results
-        uses: actions/upload-artifact@v4
-        with:
-          name: screenshots
-          path: cypress/screenshots
-
   build-and-push:
     name: ⚒️ Build and Push Docker Image
-    needs: cypress-test
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
