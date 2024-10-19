@@ -24,6 +24,36 @@ export const metadata: Metadata = {
     icon: '/favicon.ico',
     shortcut: '/favicon.ico',
     apple: '/apple-touch-icon.png'
+  },
+  openGraph: {
+    title: 'Kubernetes Load Balanced App',
+    siteName: 'Kubernetes Load Balanced App',
+    description: '🦦 A Next.js app running on Kubernetes with a load balancer',
+    type: 'website',
+    locale: 'en_US',
+    images: [
+      {
+        url: '/og-image.png',
+        alt: 'Kubernetes Load Balanced App',
+        width: 1600,
+        height: 960
+      }
+    ]
+  },
+  twitter: {
+    title: 'Kubernetes Load Balanced App',
+    description: '🦦 A Next.js app running on Kubernetes with a load balancer',
+    card: 'summary_large_image',
+    site: '@pungrumpy',
+    creator: '@pungrumpy',
+    images: [
+      {
+        url: '/twitter-image.png',
+        alt: 'Kubernetes Load Balanced App',
+        width: 1600,
+        height: 960
+      }
+    ]
   }
 }
 
