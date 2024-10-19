@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'helm/**'
+      - '.github/workflows/helm-ci.yml'
   pull_request:
     branches: [main]
     paths:
@@ -30,6 +31,7 @@ jobs:
 
   minikube:
     name: 🚢 Minikube Deployment
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout
@@ -40,6 +42,8 @@ jobs:
         run: kubectl get all --all-namespaces
       - name: 🚀 Setup Helm
         uses: azure/setup-helm@v4
+      - name: 🐀 Deploy Traefik
+        run: helm repo add traefik https://helm.traefik.io/traefik && helm repo update && helm upgrade --install --namespace kube-system --create-namespace traefik traefik/traefik
       - name: 🚢 Deploy
         run: helm upgrade --install --namespace kalb --create-namespace kalb helm
       - name: 🧪 Test the Deployment
