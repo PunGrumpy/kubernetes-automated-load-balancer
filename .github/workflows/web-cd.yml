@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - 'webapp/**'
-      - '.github/workflows/web-cd.yml'
   pull_request:
     branches:
       - main
@@ -56,13 +55,14 @@ jobs:
           sbom: ${{ github.event_name != 'pull_request' }}
           provenance: ${{ github.event_name != 'pull_request' }}
           push: ${{ github.event_name != 'pull_request' }}
-          load: true
+          load: ${{ github.event_name == 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: 🐳 Scout Scan
         uses: docker/scout-action@v1
+        if: ${{ github.event_name == 'pull_request' }}
         with:
           to-env: production
           command: cves,recommendations,compare,environment
