@@ -1,5 +1,5 @@
 import { ActivityIcon, BarChartIcon, LineChartIcon } from 'lucide-react'
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
+import { Bar, BarChart, CartesianGrid, Rectangle, XAxis, YAxis } from 'recharts'
 
 import { StatCard } from '@/components/analytics/stats-card'
 import {
@@ -36,7 +36,7 @@ export function Overview({
   const chartConfig = {
     requests: {
       label: 'Requests',
-      color: '#2563EB'
+      color: 'hsl(var(--chart-1))'
     }
   } satisfies ChartConfig
 
@@ -69,11 +69,12 @@ export function Overview({
               config={chartConfig}
               className="mx-auto aspect-square max-h-[250px] w-full max-w-5xl"
             >
-              <BarChart data={data}>
+              <BarChart accessibilityLayer data={data}>
                 <CartesianGrid vertical={false} />
                 <XAxis
                   dataKey="date"
                   fontSize={12}
+                  tickMargin={10}
                   tickLine={false}
                   axisLine={false}
                   tickFormatter={date =>
@@ -84,6 +85,7 @@ export function Overview({
                   }
                 />
                 <ChartTooltip
+                  cursor={false}
                   content={
                     <ChartTooltipContent
                       labelFormatter={date =>
@@ -95,11 +97,22 @@ export function Overview({
                       }
                     />
                   }
+                  filterNull
                 />
                 <Bar
                   dataKey="requests"
                   fill="var(--color-requests)"
+                  strokeWidth={2}
                   radius={8}
+                  activeBar={({ ...props }) => {
+                    return (
+                      <Rectangle
+                        {...props}
+                        fillOpacity={0.8}
+                        stroke={props.fill}
+                      />
+                    )
+                  }}
                 />
               </BarChart>
             </ChartContainer>

@@ -72,8 +72,9 @@ export function DeviceInsights({ deviceData }: DeviceInsightsProps) {
               <CartesianGrid vertical={false} />
               <XAxis
                 dataKey="browser"
-                tickLine={false}
+                fontSize={12}
                 tickMargin={10}
+                tickLine={false}
                 axisLine={false}
               />
               <ChartTooltip

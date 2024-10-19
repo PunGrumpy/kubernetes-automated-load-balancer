@@ -3,6 +3,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 
+import { ThemeProvider } from '@/components/theme-provider'
 import { cn } from '@/lib/utils'
 
 const geistSans = localFont({
@@ -68,10 +69,17 @@ export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
         className={cn(
           geistSans.variable,
           geistMono.variable,
-          'font-sans antialiased'
+          'min-h-screen scroll-smooth font-sans antialiased'
         )}
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )
