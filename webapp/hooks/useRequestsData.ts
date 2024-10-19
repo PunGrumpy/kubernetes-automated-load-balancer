@@ -38,7 +38,9 @@ export function useRequestsData(timeseriesRequests: TimeSeriesRequest[]) {
         ) as DeviceData
         const count = Object.values(event)[0] as number
 
-        browsers[browser] = (browsers[browser] || 0) + count
+        const browserName = browser.includes('Safari') ? 'Safari' : browser
+
+        browsers[browserName] = (browsers[browserName] || 0) + count
         if (isBot) bots += count
         total += count
       })
