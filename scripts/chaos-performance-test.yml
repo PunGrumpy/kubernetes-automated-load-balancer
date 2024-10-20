@@ -1,0 +1,158 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: Workflow
+metadata:
+  name: chaos-performance-test
+  namespace: kalb
+spec:
+  entry: entry
+  templates:
+    - name: entry
+      templateType: Serial
+      children:
+        - network-chaos
+        - resource-chaos
+        - application-chaos
+      deadline: 2h
+
+    - name: network-chaos
+      templateType: Parallel
+      children:
+        - packet-loss
+        - network-partition
+        - bandwidth-limitation
+
+    - name: packet-loss
+      templateType: Schedule
+      deadline: 5m
+      schedule:
+        schedule: '*/15 * * * *'
+        historyLimit: 1
+        concurrencyPolicy: Forbid
+        type: NetworkChaos
+        networkChaos:
+          action: loss
+          mode: one
+          selector:
+            namespaces:
+              - kalb
+            labelSelectors:
+              app.kubernetes.io/name: k8s-auto-loadbalancer
+          loss:
+            loss: '10'
+          duration: '3m'
+
+    - name: network-partition
+      templateType: Schedule
+      deadline: 5m
+      schedule:
+        schedule: '*/20 * * * *'
+        historyLimit: 1
+        concurrencyPolicy: Forbid
+        type: NetworkChaos
+        networkChaos:
+          action: partition
+          mode: one
+          selector:
+            namespaces:
+              - kalb
+            labelSelectors:
+              app.kubernetes.io/name: k8s-auto-loadbalancer
+          direction: to
+          target:
+            selector:
+              namespaces:
+                - kalb
+            mode: all
+          duration: '2m'
+
+    - name: bandwidth-limitation
+      templateType: Schedule
+      deadline: 5m
+      schedule:
+        schedule: '*/25 * * * *'
+        historyLimit: 1
+        concurrencyPolicy: Forbid
+        type: NetworkChaos
+        networkChaos:
+          action: bandwidth
+          mode: one
+          selector:
+            namespaces:
+              - kalb
+            labelSelectors:
+              app.kubernetes.io/name: k8s-auto-loadbalancer
+          bandwidth:
+            rate: '1mbps'
+            limit: 10000
+            buffer: 1000
+          duration: '4m'
+
+    - name: resource-chaos
+      templateType: Parallel
+      children:
+        - cpu-stress
+        - memory-stress
+
+    - name: cpu-stress
+      templateType: Schedule
+      deadline: 5m
+      schedule:
+        schedule: '*/18 * * * *'
+        historyLimit: 1
+        concurrencyPolicy: Forbid
+        type: StressChaos
+        stressChaos:
+          mode: one
+          selector:
+            namespaces:
+              - kalb
+            labelSelectors:
+              app.kubernetes.io/name: k8s-auto-loadbalancer
+          stressors:
+            cpu:
+              workers: 1
+              load: 80
+          duration: '3m'
+
+    - name: memory-stress
+      templateType: Schedule
+      deadline: 5m
+      schedule:
+        schedule: '*/22 * * * *'
+        historyLimit: 1
+        concurrencyPolicy: Forbid
+        type: StressChaos
+        stressChaos:
+          mode: one
+          selector:
+            namespaces:
+              - kalb
+            labelSelectors:
+              app.kubernetes.io/name: k8s-auto-loadbalancer
+          stressors:
+            memory:
+              size: '256MB'
+              workers: 2
+          duration: '3m'
+
+    - name: application-chaos
+      templateType: Serial
+      children:
+        - pod-kill
+
+    - name: pod-kill
+      templateType: Schedule
+      deadline: 5m
+      schedule:
+        schedule: '*/30 * * * *'
+        historyLimit: 1
+        concurrencyPolicy: Forbid
+        type: PodChaos
+        podChaos:
+          action: pod-kill
+          mode: one
+          selector:
+            namespaces:
+              - kalb
+            labelSelectors:
+              app.kubernetes.io/name: k8s-auto-loadbalancer
