@@ -20,12 +20,12 @@ deployment:
   podSecurityContext: {}
   securityContext: {}
   resources:
-    limits:
-      cpu: 1
-      memory: 1Gi
     requests:
-      cpu: 200m
+      cpu: 100m
       memory: 768Mi
+    limits:
+      cpu: 300m
+      memory: 1Gi
   nodeSelector: {}
   tolerations: []
   affinity:
