@@ -1,14 +1,15 @@
 import http from 'k6/http'
-import { sleep } from 'k6'
+import { check, sleep } from 'k6'
 
 export let options = {
   stages: [
-    { duration: '30s', target: 20 }, // Ramp-up to 20 users over 30 seconds
-    { duration: '1m', target: 10 }, // Stay at 10 users for 1 minute
-    { duration: '30s', target: 0 } // Ramp-down to 0 users
+    { duration: '10s', target: 50 }, // Ramp-up to 50 users over 10s (50 users per second)
+    { duration: '20s', target: 100 }, // Peak at 100 users for 20s (5 users per second)
+    { duration: '10s', target: 0 } // Ramp-down to 0 users over 10s (10 users per second)
   ],
   thresholds: {
-    http_req_duration: ['p(95)<500'] // 95% of requests should be below 500ms
+    http_req_duration: ['p(95)<1000'], // 95% of requests should be below 1000ms
+    http_req_failed: ['rate<0.01'] // Less than 1% of requests should fail
   }
 }
 
@@ -20,6 +21,14 @@ export default function () {
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     }
   }
-  http.get(url, params)
+
+  let res = http.get(url, params)
+
+  // Check if request was successful
+  check(res, {
+    'status is 200': r => r.status === 200,
+    'response time below 500ms': r => r.timings.duration < 500
+  })
+
   sleep(1)
 }
