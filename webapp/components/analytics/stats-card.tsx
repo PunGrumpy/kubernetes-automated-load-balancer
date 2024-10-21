@@ -3,8 +3,6 @@ import { TrendingDownIcon, TrendingUpIcon } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-const MotionCard = motion.create(Card)
-
 interface StatCardProps {
   title: string
   value: number | string
@@ -24,11 +22,7 @@ export function StatCard({
   description
 }: StatCardProps) {
   return (
-    <MotionCard
-      className="transition-all duration-200 hover:bg-accent/5 hover:shadow-md"
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-    >
+    <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         {icon}
@@ -72,6 +66,6 @@ export function StatCard({
           </motion.p>
         )}
       </CardContent>
-    </MotionCard>
+    </Card>
   )
 }

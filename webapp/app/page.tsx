@@ -5,6 +5,7 @@ import useSWR from 'swr'
 
 import { AnalyticsDashboard } from '@/components/analytics/dashboard'
 import { ErrorDisplay } from '@/components/error-display'
+import { Skeleton } from '@/components/ui/skeleton'
 import { fetchWrapper } from '@/lib/fetch-wrapper'
 import { TimeSeriesRequest } from '@/types'
 
@@ -13,11 +14,15 @@ interface AnalyticsData {
 }
 
 export default function Page() {
-  const { data, error } = useSWR<AnalyticsData>('/api/visitor', fetchWrapper, {
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    refreshInterval: 0
-  })
+  const { data, error, isLoading } = useSWR<AnalyticsData>(
+    '/api/visitor',
+    fetchWrapper,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0
+    }
+  )
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -40,9 +45,14 @@ export default function Page() {
         <h1 className="mb-8 text-center text-4xl font-bold">
           API Request Analytics Dashboard
         </h1>
-        {data && (
+        {isLoading ? (
+          <div className="space-y-4">
+            <Skeleton className="h-[300px] w-full" />
+            <Skeleton className="h-[200px] w-full" />
+          </div>
+        ) : data ? (
           <AnalyticsDashboard timeseriesRequests={data.timeseriesRequests} />
-        )}
+        ) : null}
         {error && <ErrorDisplay message={error.message} />}
       </main>
     </motion.div>

@@ -1,5 +1,13 @@
 import { ActivityIcon, BarChartIcon, LineChartIcon } from 'lucide-react'
-import { Bar, BarChart, CartesianGrid, Rectangle, XAxis, YAxis } from 'recharts'
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Rectangle,
+  ResponsiveContainer,
+  XAxis,
+  YAxis
+} from 'recharts'
 
 import { StatCard } from '@/components/analytics/stats-card'
 import {
@@ -46,30 +54,40 @@ export function Overview({
         <StatCard
           title="Total API Requests"
           value={totalRequests}
-          icon={<BarChartIcon className="size-4 text-muted-foreground" />}
+          icon={
+            <BarChartIcon
+              className="size-4 text-muted-foreground"
+              aria-hidden="true"
+            />
+          }
           description="Over the last 7 days"
         />
         <StatCard
           title="Avg. Requests/Day"
           value={avgRequestsPerDay}
-          icon={<LineChartIcon className="size-4 text-muted-foreground" />}
+          icon={
+            <LineChartIcon
+              className="size-4 text-muted-foreground"
+              aria-hidden="true"
+            />
+          }
           description="Over the last 7 days"
         />
       </div>
-      <div>
-        <Card>
-          <CardHeader>
-            <CardTitle>Requests Overview</CardTitle>
-            <CardDescription>
-              Daily API request count for the past week
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer
-              config={chartConfig}
-              className="mx-auto aspect-square max-h-[250px] w-full max-w-5xl"
-            >
-              <BarChart accessibilityLayer data={data}>
+      <Card>
+        <CardHeader>
+          <CardTitle>Requests Overview</CardTitle>
+          <CardDescription>
+            Daily API request count for the past week
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ChartContainer
+            config={chartConfig}
+            className="mx-auto aspect-square max-h-[250px] w-full max-w-5xl"
+          >
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={data}>
                 <CartesianGrid vertical={false} />
                 <XAxis
                   dataKey="date"
@@ -83,6 +101,12 @@ export function Overview({
                       month: 'short'
                     })
                   }
+                />
+                <YAxis
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                  tickFormatter={value => `${value}`}
                 />
                 <ChartTooltip
                   cursor={false}
@@ -115,20 +139,20 @@ export function Overview({
                   }}
                 />
               </BarChart>
-            </ChartContainer>
-          </CardContent>
-          <CardFooter className="flex-col items-start gap-2 text-sm">
-            <div className="flex gap-2 font-medium leading-none">
-              Most requests is {maxRequests} (
-              {((maxRequests / totalRequests) * 100).toFixed(1)}%)
-              <ActivityIcon className="size-4" />
-            </div>
-            <div className="leading-none text-muted-foreground">
-              Based on total in the last 7 days
-            </div>
-          </CardFooter>
-        </Card>
-      </div>
+            </ResponsiveContainer>
+          </ChartContainer>
+        </CardContent>
+        <CardFooter className="flex-col items-start gap-2 text-sm">
+          <div className="flex gap-2 font-medium leading-none">
+            Most requests is {maxRequests} (
+            {((maxRequests / totalRequests) * 100).toFixed(1)}%)
+            <ActivityIcon className="size-4" aria-hidden="true" />
+          </div>
+          <div className="leading-none text-muted-foreground">
+            Based on total in the last 7 days
+          </div>
+        </CardFooter>
+      </Card>
     </main>
   )
 }
