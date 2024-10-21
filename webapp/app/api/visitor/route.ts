@@ -10,24 +10,31 @@ export async function GET(request: NextRequest) {
     isBot
   }
 
-  try {
-    await analytics.track('api_request', deviceData)
+  if (!isBot) {
+    try {
+      await analytics.track('api_request', deviceData)
 
-    const TRACKING_DAYS = 7
-    const requests = await analytics.retrieveLastDays(
-      'api_request',
-      TRACKING_DAYS
-    )
+      const TRACKING_DAYS = 7
+      const requests = await analytics.retrieveLastDays(
+        'api_request',
+        TRACKING_DAYS
+      )
 
-    return NextResponse.json({
-      message: `Request tracked successfully`,
-      timeseriesRequests: requests
-    })
-  } catch (error) {
-    console.error('Error tracking API request:', error)
+      return NextResponse.json({
+        message: `Request tracked successfully`,
+        timeseriesRequests: requests
+      })
+    } catch (error) {
+      console.error('Error tracking API request:', error)
+      return NextResponse.json(
+        { error: 'Failed to track request' },
+        { status: 500 }
+      )
+    }
+  } else {
     return NextResponse.json(
-      { error: 'Failed to track request' },
-      { status: 500 }
+      { message: 'Request not tracked for bots' },
+      { status: 200 }
     )
   }
 }
