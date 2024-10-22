@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { analytics } from '@/lib/analytics'
 import { getDeviceData } from '@/lib/utils'
 
-const CACHE_EXPIRY = 5 * 60 // 5 minutes
+const CACHE_EXPIRY = 15 // seconds
 const TRACKING_DAYS = 7
 
 export const runtime = 'edge'
