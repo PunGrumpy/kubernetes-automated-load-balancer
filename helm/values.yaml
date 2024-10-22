@@ -68,7 +68,7 @@ autoscaling:
     enabled: true
     minReplicas: 2
     maxReplicas: 5
-    targetCPUUtilizationPercentage: 60
+    targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: 80
     behavior:
       scaleDown:
@@ -149,16 +149,28 @@ traefik:
       - name: ratelimit
         spec:
           rateLimit:
-            average: 500
-            burst: 1000
+            average: 200
+            burst: 400
       - name: retry
         spec:
           retry:
-            attempts: 3
+            attempts: 2
             initialInterval: '100ms'
+      - name: circuit-breaker
+        spec:
+          circuitBreaker:
+            expression: 'ResponseCodeRatio(500, 600, 0, 600) > 0.25'
+      - name: buffering
+        spec:
+          buffering:
+            maxRequestBodyBytes: 2097152
+            memRequestBodyBytes: 2097152
+            maxResponseBodyBytes: 2097152
+            memResponseBodyBytes: 2097152
+            retryExpression: 'IsNetworkError() && Attempts() <= 2'
 
 # Pod Disruption Budget configuration
 podDisruptionBudget:
   enabled: true
-  minAvailable: 1
-  maxUnavailable: 0
+  minAvailable: 2
+  maxUnavailable: 1
