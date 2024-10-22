@@ -65,7 +65,9 @@ export function DeviceInsights({ deviceData }: DeviceInsightsProps) {
       <Card className="md:col-span-2">
         <CardHeader>
           <CardTitle>Browser Distribution</CardTitle>
-          <CardDescription>Top 5 browsers by usage</CardDescription>
+          <CardDescription>
+            Top 5 browsers by usage (excluding bots)
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <ChartContainer
@@ -106,12 +108,16 @@ export function DeviceInsights({ deviceData }: DeviceInsightsProps) {
         </CardContent>
         <CardFooter className="flex-col items-start gap-2 text-sm">
           <div className="flex gap-2 font-medium leading-none">
-            Most popular is {chartData[0].browser} (
-            {((chartData[0].visitors / totalVisitors) * 100).toFixed(1)}%)
+            Most popular is {chartData[0]?.browser || 'N/A'} (
+            {chartData[0]?.visitors
+              ? ((chartData[0].visitors / totalVisitors) * 100).toFixed(1)
+              : 0}
+            %)
             <TrendingUp className="size-4" aria-hidden="true" />
           </div>
           <div className="leading-none text-muted-foreground">
-            Based on {totalVisitors.toLocaleString()} total visitors
+            Based on {totalVisitors.toLocaleString()} total visitors (excluding
+            bots)
           </div>
         </CardFooter>
       </Card>
