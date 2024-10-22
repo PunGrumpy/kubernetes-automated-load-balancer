@@ -14,7 +14,6 @@ A project focused on designing and implementing automated load balancing within 
 - 🚦 [Traefik](https://traefik.io/) - Ingress Controller for Kubernetes
 - 📊 [Prometheus](https://prometheus.io/) - Monitoring and Alerting Toolkit
 - 📈 [Grafana](https://grafana.com/) - Observability Platform
-- 📉 [Loki](https://grafana.com/oss/loki/) - Log Aggregation System
 
 ## ✨ Features
 
