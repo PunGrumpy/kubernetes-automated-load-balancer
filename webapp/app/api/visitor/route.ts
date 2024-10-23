@@ -1,47 +1,78 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { analytics } from '@/lib/analytics'
-import { getDeviceData } from '@/lib/utils'
+const allowedOrigins = ['https://pungrumpy.xyz', 'http://localhost:3000']
 
-const CACHE_EXPIRY = 15 // seconds
-const TRACKING_DAYS = 7
+function isAllowedOrigin(origin: string | null): boolean {
+  return origin !== null && allowedOrigins.includes(origin)
+}
 
-export const runtime = 'edge'
+export function middleware(request: NextRequest) {
+  const origin = request.headers.get('origin')
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
+  const cspHeader = `
+    default-src 'self';
+    script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
+    style-src 'self' 'nonce-${nonce}';
+    img-src 'self' blob: data:;
+    font-src 'self';
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    frame-ancestors 'none';
+    connect-src 'self' https://api.example.com;
+    media-src 'self';
+    upgrade-insecure-requests;
+  `
 
-export async function GET(request: NextRequest) {
-  const deviceData = getDeviceData(request)
+  // Replace newline characters and spaces
+  const contentSecurityPolicyHeaderValue = cspHeader
+    .replace(/\s{2,}/g, ' ')
+    .trim()
 
-  try {
-    let message: string
-    if (deviceData.isBot) {
-      message = 'Bot request noted'
-      await analytics.trackBot()
-    } else {
-      message = 'Request tracked successfully'
-      await analytics.track('api_request', deviceData)
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set('x-nonce', nonce)
+  requestHeaders.set(
+    'Content-Security-Policy',
+    contentSecurityPolicyHeaderValue
+  )
+
+  if (request.nextUrl.pathname.startsWith('/api')) {
+    if (!isAllowedOrigin(origin)) {
+      return new NextResponse(null, {
+        status: 403,
+        statusText: 'Forbidden',
+        headers: {
+          'Content-Type': 'text/plain'
+        }
+      })
     }
 
-    const requests = await analytics.retrieveLastDays(
-      'api_request',
-      TRACKING_DAYS
-    )
-
-    return NextResponse.json(
-      {
-        message,
-        timeseriesRequests: requests
-      },
-      {
-        headers: {
-          'Cache-Control': `public, s-maxage=${CACHE_EXPIRY}, stale-while-revalidate=30`
-        }
+    // Set CORS headers for allowed origins
+    const response = NextResponse.next({
+      request: {
+        headers: requestHeaders
       }
+    })
+    response.headers.set('Access-Control-Allow-Origin', origin || '')
+    response.headers.set(
+      'Access-Control-Allow-Methods',
+      'GET, POST, PUT, DELETE, OPTIONS'
     )
-  } catch (error) {
-    console.error('Error processing request:', error)
-    return NextResponse.json(
-      { error: 'Failed to process request' },
-      { status: 500 }
+    response.headers.set(
+      'Access-Control-Allow-Headers',
+      'Content-Type, Authorization'
     )
+    return response
   }
+
+  // For non-API routes, just apply the CSP
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders
+    }
+  })
+}
+
+export const config = {
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)']
 }

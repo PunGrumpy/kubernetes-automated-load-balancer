@@ -4,7 +4,9 @@ export async function fetchWrapper<T>(
 ): Promise<T> {
   const response = await fetch(url, options)
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`)
+    throw new Error(
+      `Failed to fetch data: ${response.statusText} (${response.status})`
+    )
   }
   return response.json()
 }
