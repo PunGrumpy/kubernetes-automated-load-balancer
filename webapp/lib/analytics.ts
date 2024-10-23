@@ -1,4 +1,4 @@
-import { redis } from '@/lib/db'
+import { redis } from '@/lib/redis'
 import { getDate } from '@/lib/utils'
 
 interface AnalyticsEvent {

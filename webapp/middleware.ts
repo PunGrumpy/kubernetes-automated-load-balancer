@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const allowedOrigins = ['https://pungrumpy.xyz', 'http://localhost:3000']
+import { ratelimit } from '@/lib/redis'
 
-function isAllowedOrigin(origin: string | null): boolean {
-  return origin !== null && allowedOrigins.includes(origin)
-}
+export async function middleware(request: NextRequest) {
+  const ip = request.ip ?? '127.0.0.1'
+  const { success } = await ratelimit.limit(ip)
+  if (!success) {
+    NextResponse.redirect(new URL('/blocked', request.url))
+  }
 
-export function middleware(request: NextRequest) {
-  const origin = request.headers.get('origin')
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
   const cspHeader = `
     default-src 'self';
@@ -21,18 +22,6 @@ export function middleware(request: NextRequest) {
     frame-ancestors 'none';
     upgrade-insecure-requests;
 `
-
-  if (request.nextUrl.pathname.startsWith('/api')) {
-    if (!isAllowedOrigin(origin)) {
-      return new NextResponse(null, {
-        status: 403,
-        statusText: 'Forbidden',
-        headers: {
-          'Content-Type': 'text/plain'
-        }
-      })
-    }
-  }
 
   // Replace newline characters and spaces
   const contentSecurityPolicyHeaderValue = cspHeader
@@ -60,10 +49,11 @@ export const config = {
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
+     * - api/ (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico, sitemap.xml, robots.txt (metadata files)
      */
-    '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)'
+    '/((?!api/_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)'
   ]
 }

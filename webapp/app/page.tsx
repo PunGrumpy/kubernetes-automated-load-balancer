@@ -6,7 +6,7 @@ import useSWR from 'swr'
 import { AnalyticsDashboard } from '@/components/analytics/dashboard'
 import { ErrorDisplay } from '@/components/error-display'
 import { Skeleton } from '@/components/ui/skeleton'
-import { fetchWrapper } from '@/lib/fetch-wrapper'
+import { fetchWrapper } from '@/lib/fetch'
 import { TimeSeriesRequest } from '@/types'
 
 interface AnalyticsData {
