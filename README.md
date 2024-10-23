@@ -14,6 +14,9 @@ A project focused on designing and implementing automated load balancing within 
 - 🚦 [Traefik](https://traefik.io/) - Ingress Controller for Kubernetes
 - 📊 [Prometheus](https://prometheus.io/) - Monitoring and Alerting Toolkit
 - 📈 [Grafana](https://grafana.com/) - Observability Platform
+- 🏗️ [OpenTofu/Terraform](https://opentofu.org/) - Infrastructure as Code (on 🫁 [Setup Server](https://github.com/PunGrumpy/kubernetes-automated-load-balancer/tree/setup/server))
+- ▲ [Next.js](https://nextjs.org/) - React Framework
+- 📦 [Upstash](https://upstash.com/) - In-Memory Data Structure Store
 
 ## ✨ Features
 
