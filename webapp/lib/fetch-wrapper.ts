@@ -5,7 +5,7 @@ export async function fetchWrapper<T>(
   const response = await fetch(url, options)
   if (!response.ok) {
     throw new Error(
-      `Failed to fetch data: ${response.statusText} (${response.status})`
+      `Failed to fetch data: ${response.statusText ?? 'Unknown error'} (${response.status})`
     )
   }
   return response.json()
