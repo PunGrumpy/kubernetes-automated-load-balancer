@@ -52,6 +52,8 @@ jobs:
             UPSTASH_REDIS_REST_URL=${{ secrets.UPSTASH_REDIS_REST_URL }}
             UPSTASH_REDIS_REST_TOKEN=${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
             AUTH_API_KEY=${{ secrets.AUTH_API_KEY }}
+            NEXT_PUBLIC_METADATA_BASE=${{ secrets.NEXT_PUBLIC_METADATA_BASE }}
+            NEXT_PUBLIC_AUTH_API_KEY=${{ secrets.NEXT_PUBLIC_AUTH_API_KEY }}
           sbom: ${{ github.event_name != 'pull_request' }}
           provenance: ${{ github.event_name != 'pull_request' }}
           push: ${{ github.event_name != 'pull_request' }}
