@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
 import { AnalyticsDashboard } from '@/components/analytics/dashboard'
@@ -14,8 +15,11 @@ interface AnalyticsData {
 }
 
 export default function Page() {
+  const [isAuthenticating, setIsAuthenticating] = useState(true)
+  const [authError, setAuthError] = useState<string | null>(null)
+
   const { data, error, isLoading } = useSWR<AnalyticsData>(
-    '/api/visitor',
+    !isAuthenticating ? '/api/visitor' : null,
     fetcher,
     {
       revalidateOnFocus: false,
@@ -23,6 +27,27 @@ export default function Page() {
       refreshInterval: 0
     }
   )
+
+  useEffect(() => {
+    const authenticate = async () => {
+      try {
+        await fetcher('/api/auth')
+      } catch (error) {
+        setAuthError(
+          error instanceof Error ? error.message : 'Authentication failed'
+        )
+        console.error('Authentication error:', error)
+      } finally {
+        setIsAuthenticating(false)
+      }
+    }
+
+    authenticate()
+  }, [])
+
+  if (authError) {
+    return <ErrorDisplay message={authError} />
+  }
 
   const containerVariants = {
     hidden: { opacity: 0 },

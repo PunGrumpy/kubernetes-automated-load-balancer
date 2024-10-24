@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 import { analytics } from '@/lib/analytics'
+import { getSession } from '@/lib/session'
 import { getDeviceData } from '@/lib/utils'
 
 const TRACKING_DAYS = 7
@@ -20,10 +21,13 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const token = request.headers.get('Authorization')?.split(' ')[1]
+  const session = await getSession()
 
-  if (token !== process.env.AUTH_API_KEY) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  if (!session.isLoggedIn) {
+    return NextResponse.json(
+      { error: 'Unauthorized - Please authenticate first' },
+      { status: 401 }
+    )
   }
 
   const deviceData = getDeviceData(request)
