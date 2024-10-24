@@ -7,8 +7,10 @@ const TRACKING_DAYS = 7
 
 export const runtime = 'edge'
 
-export async function GET(request: NextRequest) {
-  return NextResponse.redirect(new URL('/blocked', request.url))
+export async function GET() {
+  return NextResponse.redirect(
+    new URL('/blocked', process.env.NEXT_PUBLIC_METADATA_BASE)
+  )
 }
 
 export async function POST(request: NextRequest) {

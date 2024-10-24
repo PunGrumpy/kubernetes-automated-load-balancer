@@ -18,6 +18,9 @@ COPY . .
 # Build with secrets
 RUN --mount=type=secret,id=UPSTASH_REDIS_REST_URL,env=UPSTASH_REDIS_REST_URL \
     --mount=type=secret,id=UPSTASH_REDIS_REST_TOKEN,env=UPSTASH_REDIS_REST_TOKEN \
+    --mount=type=secret,id=NEXT_PUBLIC_METADATA_BASE,env=NEXT_PUBLIC_METADATA_BASE \
+    --mount=type=secret,id=NEXT_PUBLIC_AUTH_API_KEY,env=NEXT_PUBLIC_AUTH_API_KEY \
+    --mount=type=secret,id=AUTH_API_KEY,env=AUTH_API_KEY \
     bun run build
 
 # Production image
