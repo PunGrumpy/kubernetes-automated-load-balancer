@@ -5,8 +5,6 @@ import { getDeviceData } from '@/lib/utils'
 
 const TRACKING_DAYS = 7
 
-export const runtime = 'edge'
-
 export async function GET(request: NextRequest) {
   const url = request.nextUrl.origin + '/blocked'
 
