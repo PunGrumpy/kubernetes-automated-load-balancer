@@ -1,13 +1,27 @@
-import { generateSignature } from '@/lib/auth'
-
 export const fetcher = async <T>(url: string): Promise<T> => {
   try {
     const timestamp = Date.now()
     const publicToken = process.env.NEXT_PUBLIC_AUTH_API_KEY!
 
-    // Generate signature
-    const signature = generateSignature(publicToken, timestamp)
+    // Get signature from server
+    const signResponse = await fetch('/api/auth', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        timestamp,
+        publicToken
+      })
+    })
 
+    if (!signResponse.ok) {
+      throw new Error('Failed to get signature')
+    }
+
+    const { signature } = await signResponse.json()
+
+    // Make the actual request
     const response = await fetch(url, {
       method: 'POST',
       headers: {
