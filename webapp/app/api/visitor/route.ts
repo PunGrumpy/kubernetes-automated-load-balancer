@@ -6,7 +6,10 @@ import { getDeviceData } from '@/lib/utils'
 const TRACKING_DAYS = 7
 
 export async function GET(request: NextRequest) {
-  const url = request.nextUrl.origin + '/blocked'
+  const domain = process.env.NEXT_PUBLIC_METADATA_BASE
+    ? process.env.NEXT_PUBLIC_METADATA_BASE
+    : request.url
+  const url = new URL(domain + '/blocked')
 
   return NextResponse.redirect(url, {
     status: 302,
