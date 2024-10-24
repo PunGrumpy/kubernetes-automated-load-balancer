@@ -8,6 +8,16 @@ const TRACKING_DAYS = 7
 export const runtime = 'edge'
 
 export async function GET(request: NextRequest) {
+  return NextResponse.redirect(new URL('/blocked', request.url))
+}
+
+export async function POST(request: NextRequest) {
+  const token = request.headers.get('Authorization')?.split(' ')[1]
+
+  if (token !== process.env.AUTH_API_KEY) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   const deviceData = getDeviceData(request)
 
   try {

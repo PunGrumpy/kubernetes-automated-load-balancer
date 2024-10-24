@@ -6,7 +6,7 @@ import useSWR from 'swr'
 import { AnalyticsDashboard } from '@/components/analytics/dashboard'
 import { ErrorDisplay } from '@/components/error-display'
 import { Skeleton } from '@/components/ui/skeleton'
-import { fetchWrapper } from '@/lib/fetch'
+import { fetcher } from '@/lib/fetch'
 import { TimeSeriesRequest } from '@/types'
 
 interface AnalyticsData {
@@ -16,7 +16,7 @@ interface AnalyticsData {
 export default function Page() {
   const { data, error, isLoading } = useSWR<AnalyticsData>(
     '/api/visitor',
-    fetchWrapper,
+    fetcher,
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,

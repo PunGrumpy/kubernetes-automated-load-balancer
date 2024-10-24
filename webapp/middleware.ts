@@ -1,14 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { ratelimit } from '@/lib/redis'
-
 export async function middleware(request: NextRequest) {
-  const ip = request.ip ?? '127.0.0.1'
-  const { success } = await ratelimit.limit(ip)
-  if (!success) {
-    NextResponse.redirect(new URL('/blocked', request.url))
-  }
-
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
   const cspHeader = `
     default-src 'self';
@@ -41,6 +33,14 @@ export async function middleware(request: NextRequest) {
       headers: requestHeaders
     }
   })
+
+  // Add CORS headers
+  response.headers.set('Access-Control-Allow-Origin', '*')
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST')
+  response.headers.set(
+    'Access-Control-Allow-Headers',
+    'Content-Type, Authorization'
+  )
 
   return response
 }
