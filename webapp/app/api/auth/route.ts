@@ -2,6 +2,20 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { generateServerSignature } from '@/lib/auth'
 
+export async function GET(request: NextRequest) {
+  const domain = process.env.NEXT_PUBLIC_METADATA_BASE
+    ? process.env.NEXT_PUBLIC_METADATA_BASE
+    : request.url
+  const url = new URL(domain + '/blocked')
+
+  return NextResponse.redirect(url, {
+    status: 302,
+    headers: {
+      'Cache-Control': 's-maxage=0'
+    }
+  })
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { publicToken, timestamp } = await request.json()
