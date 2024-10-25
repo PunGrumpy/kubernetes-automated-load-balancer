@@ -1,10 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 import { analytics } from '@/lib/analytics'
+import { handleServerError, handleUnauthorized } from '@/lib/handler'
 import { getSession } from '@/lib/session'
 import { getDeviceData } from '@/lib/utils'
 
 const TRACKING_DAYS = 7
+
+async function handleTracking(request: NextRequest) {
+  const deviceData = getDeviceData(request)
+  await analytics.track('api_request', deviceData)
+  const requests = await analytics.retrieveLastDays(
+    'api_request',
+    TRACKING_DAYS
+  )
+  return NextResponse.json({
+    message: 'Request tracked successfully',
+    timeseriesRequests: requests
+  })
+}
 
 export async function GET(request: NextRequest) {
   const domain = process.env.NEXT_PUBLIC_METADATA_BASE
@@ -21,33 +35,15 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await getSession()
-
-  if (!session.isLoggedIn) {
-    return NextResponse.json(
-      { error: 'Unauthorized - Please authenticate first' },
-      { status: 401 }
-    )
-  }
-
-  const deviceData = getDeviceData(request)
-
   try {
-    await analytics.track('api_request', deviceData)
-    const requests = await analytics.retrieveLastDays(
-      'api_request',
-      TRACKING_DAYS
-    )
+    const session = await getSession()
 
-    return NextResponse.json({
-      message: 'Request tracked successfully',
-      timeseriesRequests: requests
-    })
+    if (!session.isLoggedIn) {
+      return handleUnauthorized()
+    }
+
+    return handleTracking(request)
   } catch (error) {
-    console.error('Error processing request:', error)
-    return NextResponse.json(
-      { error: 'Failed to process request' },
-      { status: 500 }
-    )
+    return handleServerError(error)
   }
 }
