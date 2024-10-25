@@ -32,6 +32,7 @@ export default function Page() {
     const authenticate = async () => {
       try {
         await fetcher('/api/auth')
+        setIsAuthenticating(false)
       } catch (error) {
         setAuthError(
           error instanceof Error ? error.message : 'Authentication failed'

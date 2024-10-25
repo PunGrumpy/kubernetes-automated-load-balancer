@@ -1,24 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { generateServerSignature } from '@/lib/auth'
-
-export async function GET(request: NextRequest) {
-  const domain = process.env.NEXT_PUBLIC_METADATA_BASE
-    ? process.env.NEXT_PUBLIC_METADATA_BASE
-    : request.url
-  const url = new URL(domain + '/blocked')
-
-  return NextResponse.redirect(url, {
-    status: 302,
-    headers: {
-      'Cache-Control': 's-maxage=0'
-    }
-  })
-}
+import { authenticateUser, generateServerSignature } from '@/lib/auth'
 
 export async function POST(request: NextRequest) {
   try {
-    const { publicToken, timestamp } = await request.json()
+    const { publicToken, timestamp, signature } = await request.json()
 
     if (publicToken !== process.env.NEXT_PUBLIC_AUTH_API_KEY) {
       return NextResponse.json(
@@ -27,11 +13,32 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const signature = await generateServerSignature(publicToken, timestamp)
-    return NextResponse.json({ signature })
+    if (signature) {
+      // This is an authentication request
+      const isAuthenticated = await authenticateUser(
+        publicToken,
+        timestamp,
+        signature
+      )
+      if (isAuthenticated) {
+        return NextResponse.json({ message: 'Authentication successful' })
+      } else {
+        return NextResponse.json(
+          { error: 'Authentication failed' },
+          { status: 401 }
+        )
+      }
+    } else {
+      // This is a signature generation request
+      const generatedSignature = await generateServerSignature(
+        publicToken,
+        timestamp
+      )
+      return NextResponse.json({ signature: generatedSignature })
+    }
   } catch (error) {
     return NextResponse.json(
-      { error: 'Failed to generate signature' },
+      { error: 'Failed to process request' },
       { status: 500 }
     )
   }

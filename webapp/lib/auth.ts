@@ -2,6 +2,8 @@
 
 import { createHmac } from 'crypto'
 
+import { getSession } from '@/lib/session'
+
 export async function generateServerSignature(
   publicToken: string,
   timestamp: number
@@ -27,4 +29,19 @@ export async function verifySignature(
     timestamp
   )
   return expectedSignature === signature
+}
+
+export async function authenticateUser(
+  publicToken: string,
+  timestamp: number,
+  signature: string
+): Promise<boolean> {
+  const isValid = await verifySignature(publicToken, timestamp, signature)
+  if (isValid) {
+    const session = await getSession()
+    session.isLoggedIn = true
+    await session.save()
+    return true
+  }
+  return false
 }
