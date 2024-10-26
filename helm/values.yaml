@@ -1,7 +1,7 @@
 # Global settings
 global:
-  nameOverride: "k8s-auto-loadbalancer"
-  fullnameOverride: "k8s-auto-loadbalancer"
+  nameOverride: 'k8s-auto-loadbalancer'
+  fullnameOverride: 'k8s-auto-loadbalancer'
 
 # Deployment configuration
 deployment:
@@ -21,11 +21,11 @@ deployment:
   securityContext: {}
   resources:
     requests:
-      cpu: 100m
-      memory: 768Mi
+      cpu: 200m
+      memory: 512Mi
     limits:
-      cpu: 300m
-      memory: 1Gi
+      cpu: 400m
+      memory: 768Mi
   nodeSelector: {}
   tolerations: []
   affinity:
@@ -88,7 +88,7 @@ autoscaling:
             periodSeconds: 15
   vertical:
     enabled: false
-    updateMode: "Off"
+    updateMode: 'Off'
     minAllowed:
       cpu: 100m
       memory: 256Mi
@@ -100,7 +100,7 @@ autoscaling:
 serviceAccount:
   create: true
   annotations: {}
-  name: ""
+  name: ''
 
 # ConfigMap configuration
 configMap:
@@ -115,8 +115,8 @@ resourceManagement:
   quota:
     enabled: true
     hard:
-      requests.cpu: "2"
-      limits.cpu: "4"
+      requests.cpu: '2'
+      limits.cpu: '4'
       requests.memory: 4Gi
       limits.memory: 8Gi
   limitRange:
@@ -155,11 +155,11 @@ traefik:
         spec:
           retry:
             attempts: 2
-            initialInterval: "100ms"
+            initialInterval: '100ms'
       - name: circuit-breaker
         spec:
           circuitBreaker:
-            expression: "ResponseCodeRatio(500, 600, 0, 600) > 0.25"
+            expression: 'ResponseCodeRatio(500, 600, 0, 600) > 0.25'
       - name: buffering
         spec:
           buffering:
@@ -167,7 +167,7 @@ traefik:
             memRequestBodyBytes: 2097152
             maxResponseBodyBytes: 2097152
             memResponseBodyBytes: 2097152
-            retryExpression: "IsNetworkError() && Attempts() <= 2"
+            retryExpression: 'IsNetworkError() && Attempts() <= 2'
 
 # Pod Disruption Budget configuration
 podDisruptionBudget:
