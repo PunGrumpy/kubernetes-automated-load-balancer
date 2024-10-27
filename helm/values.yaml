@@ -108,7 +108,7 @@ configMap:
 
 # Secrets configuration
 secrets:
-  secretName: webapp-secret
+  secretName: kalb-secrets
 
 # Resource management
 resourceManagement:
