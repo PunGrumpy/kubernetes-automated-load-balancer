@@ -20,6 +20,6 @@ output "traefik_release_name" {
 
 output "argocd_admin_password" {
   description = "ArgoCD admin password"
-  value       = nonsensitive(data.kubernetes_secret.argocd_admin_password.data["password"])
+  value       = try(kubernetes_secret.argocd_password.data["password"], "")
   sensitive   = true
 }

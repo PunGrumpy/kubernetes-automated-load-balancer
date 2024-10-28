@@ -8,7 +8,13 @@ output "grafana_url" {
   value       = "https://${var.grafana_domain}"
 }
 
-output "kubectl_config_command" {
-  description = "Command to configure kubectl"
-  value       = "export KUBECONFIG=~/.kube/config"
+output "kubeconfig_path" {
+  description = "Path to kubeconfig file"
+  value       = "~/.kube/config"
+}
+
+output "argocd_admin_password" {
+  description = "ArgoCD admin password"
+  value       = module.helm_releases.argocd_admin_password
+  sensitive   = true
 }

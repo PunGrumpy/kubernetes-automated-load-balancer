@@ -2,7 +2,7 @@
 additionalArguments:
   # Cloudflare Annotations
   - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
-  - --certificatesresolvers.cloudflare.acme.email=cloudflare.pebble609@passinbox.com
+  - --certificatesresolvers.cloudflare.acme.email=${cloudflare_email}
   - --certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1
   - --certificatesresolvers.cloudflare.acme.storage=/ssl-certs/acme-cloudflare.json
 

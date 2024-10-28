@@ -1,9 +1,17 @@
+# Server configuration
 server_ip       = "your server ip"
 ssh_user        = "your ssh user"
 ssh_private_key = "your ssh private key path"
 
+# Kubernetes configuration
+kube_config_path    = "your kube config path"
+kube_config_context = "your kube config context"
+
+# Cloudflare configuration
 cloudflare_email   = "your cloudflare email"
 cloudflare_api_key = "your cloudflare token"
+environment        = "your environment" # dev, staging, prod
 
+# Domain configuration
 argocd_domain  = "argocd.yourdomain.com"
 grafana_domain = "grafana.yourdomain.com"

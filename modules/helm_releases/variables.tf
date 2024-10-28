@@ -17,3 +17,14 @@ variable "grafana_domain" {
   type        = string
   default     = "grafana.pungrumpy.xyz"
 }
+
+variable "environment" {
+  description = "Environment name (e.g., prod, staging)"
+  type        = string
+  default     = "prod"
+
+  validation {
+    condition     = contains(["prod", "staging", "dev"], var.environment)
+    error_message = "Environment must be one of: prod, staging, dev."
+  }
+}

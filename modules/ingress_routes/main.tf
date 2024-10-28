@@ -1,4 +1,4 @@
-resource "kubernetes_manifest" "argocd_ingress_route" {
+resource "kubernetes_manifest" "argocd_ingress" {
   manifest = yamldecode(templatefile("${path.module}/templates/ingress-route.yml", {
     name          = "argocd-server"
     namespace     = "argocd"
@@ -9,7 +9,7 @@ resource "kubernetes_manifest" "argocd_ingress_route" {
   }))
 }
 
-resource "kubernetes_manifest" "grafana_ingress_route" {
+resource "kubernetes_manifest" "grafana_ingress" {
   manifest = yamldecode(templatefile("${path.module}/templates/ingress-route.yml", {
     name          = "grafana"
     namespace     = "monitoring"

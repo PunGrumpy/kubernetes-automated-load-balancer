@@ -1,7 +1,7 @@
 ---
 global:
   # Used for ingresses, certificates, SSO, notifications, etc.
-  domain: argocd.pungrumpy.xyz
+  domain: ${domain}
 
 configs:
   params:
