@@ -73,9 +73,9 @@ autoscaling:
     behavior:
       scaleDown:
         # Production
-        # stabilizationWindowSeconds: 300
+        stabilizationWindowSeconds: 300
         # Development
-        stabilizationWindowSeconds: 0
+        # stabilizationWindowSeconds: 0
         policies:
           - type: Percent
             value: 100
