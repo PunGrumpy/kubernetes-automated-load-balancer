@@ -149,11 +149,11 @@ traefik:
   middlewares:
     enabled: true
     configurations:
-      - name: ratelimit
-        spec:
-          rateLimit:
-            average: 100
-            burst: 400
+      # - name: ratelimit
+      #   spec:
+      #     rateLimit:
+      #       average: 100
+      #       burst: 400
       - name: retry
         spec:
           retry:
