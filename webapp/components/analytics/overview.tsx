@@ -102,12 +102,6 @@ export function Overview({
                     })
                   }
                 />
-                <YAxis
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                  tickFormatter={value => `${value}`}
-                />
                 <ChartTooltip
                   cursor={false}
                   content={
